@@ -1,0 +1,15 @@
+/Users/juliasaliy/Projects/quoridor/quoridor/bin/Debug/net6.0/quoridor
+/Users/juliasaliy/Projects/quoridor/quoridor/bin/Debug/net6.0/quoridor.deps.json
+/Users/juliasaliy/Projects/quoridor/quoridor/bin/Debug/net6.0/quoridor.runtimeconfig.json
+/Users/juliasaliy/Projects/quoridor/quoridor/bin/Debug/net6.0/quoridor.dll
+/Users/juliasaliy/Projects/quoridor/quoridor/bin/Debug/net6.0/ref/quoridor.dll
+/Users/juliasaliy/Projects/quoridor/quoridor/bin/Debug/net6.0/quoridor.pdb
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.csproj.AssemblyReference.cache
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.GeneratedMSBuildEditorConfig.editorconfig
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.AssemblyInfoInputs.cache
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.AssemblyInfo.cs
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.csproj.CoreCompileInputs.cache
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.dll
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/ref/quoridor.dll
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.pdb
+/Users/juliasaliy/Projects/quoridor/quoridor/obj/Debug/net6.0/quoridor.genruntimeconfig.cache
