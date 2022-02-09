@@ -3,10 +3,16 @@ namespace quoridor
 {
 	public class QuoridorEngine
 	{
-		public Pawn[] PawnsOnBoard = new(2);
+		public List<Pawn> PawnsOnBoard = new();
 
-		public Wall[] WallsOnBoard = new(20);
+		public List<Wall> WallsOnBoard = new();
 
+		public void GameInitializer()
+		{
+			PawnsOnBoard.Add(new Pawn(name: "W", row: 1, col: 1 ));
+			PawnsOnBoard.Add(new Pawn(name: "B", row: 1, col: 2));
+
+		}
 
 		public QuoridorEngine()
 		{
