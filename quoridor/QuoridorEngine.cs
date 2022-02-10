@@ -9,8 +9,8 @@ namespace quoridor
 
 		public void GameInitializer()
 		{
-			PawnsOnBoard.Add(new Pawn(name: "W", row: 1, col: 1 ));
-			PawnsOnBoard.Add(new Pawn(name: "B", row: 1, col: 2));
+			PawnsOnBoard.Add(new Pawn(name: "W", row: 1, col: 5 ));
+			PawnsOnBoard.Add(new Pawn(name: "B", row: 9, col: 5));
 
 		}
 

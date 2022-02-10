@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Quoridor 
+namespace quoridor
 {
-    public class Program
+    class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             
+            BoardView board = new();
+            board.DrawBoard();
+            return (int)ReturnCode.Success;
         }
     }
 }
+
