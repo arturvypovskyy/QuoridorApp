@@ -3,7 +3,9 @@ namespace quoridor
 {
 	public class BoardView
 	{
-		public List<Pawn> shadownPawns = new List<Pawn>();
+		public List<Pawn> shadownPawns = new();
+
+		public List<Wall> shadowWalls = new();
 
 		public char[,] boardMatrix = new char[17, 17];
 
@@ -65,10 +67,37 @@ namespace quoridor
 		}
 
 
+		public void DrawWalls()
+		{
+			foreach (var wall in shadowWalls)
+			{
+				DrawWall(wall);
+			}
+		}
+
+
+		public void DrawWall(Wall wall)
+		{
+			if (wall.Orientation == 'h')
+			{
+				boardMatrix[wall.Row, wall.Col - 1] = '█';
+				boardMatrix[wall.Row, wall.Col] = '█';
+				boardMatrix[wall.Row, wall.Col + 1] = '█';
+			}
+			else
+			{
+				boardMatrix[wall.Row + 1, wall.Col] = '█';
+				boardMatrix[wall.Row, wall.Col] = '█';
+				boardMatrix[wall.Row - 1, wall.Col] = '█';
+			}
+		}
+
+
 		public void ViewDisplay()
 		{
 			SetEmptyMatrix();
 			DrawPawns();
+			DrawWalls();
 			DrawBoard();
 		}
 
@@ -99,13 +128,20 @@ namespace quoridor
 		{
 			var input = args.Split();
 
-			var possibleCommands = new string[] {"move", "jump",};
+			var possibleCommands = new string[] {"move", "jump", "wall"};
 
 			if (possibleCommands.Contains(input[0]))
 			{
 				if (int.TryParse(input[1], out int toRow) && int.TryParse(input[2], out int toCol))
 				{
-					command = new Command(input[0],toRow, toCol);
+					if (input.Length > 3 && char.TryParse(input[3], out char orientation))
+					{
+						command = new Command(input[0], toRow, toCol, orientation);
+					}
+					else
+					{
+						command = new Command(input[0], toRow, toCol);
+					}
 					return true;
 				}
 			}

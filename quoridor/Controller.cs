@@ -22,6 +22,7 @@ namespace quoridor
 		public void ViewDidLoad()
 		{
 			boardView.shadownPawns = quoridorEngine.PawnsOnBoard;
+			boardView.shadowWalls = quoridorEngine.WallsOnBoard; 
 			boardView.ViewDisplay();
 		}
 
@@ -32,6 +33,9 @@ namespace quoridor
 			{
 				case "move":
 					quoridorEngine.MovePiece(quoridorEngine.currentPlayer.PawnName, command.ToRow, command.ToCol);
+					break;
+				case "wall":
+					quoridorEngine.SetWall(command.Orientation,command.ToRow, command.ToCol);
 					break;
 			}
 		}

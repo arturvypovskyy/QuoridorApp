@@ -47,6 +47,19 @@ namespace quoridor
 		}
 
 
+		public void SetWall(char? orientation,int toRow, int toCol)
+		{
+			if (orientation is null)
+			{
+				Console.WriteLine("Incorrect orientation");
+			}
+			else
+			{
+				WallsOnBoard.Add(new Wall(orientation, toRow, toCol));
+			}
+		}
+
+
 		private Pawn? GetPawn(char name)
 		{
 			foreach (var pawn in PawnsOnBoard)
