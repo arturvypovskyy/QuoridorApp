@@ -3,19 +3,18 @@ namespace quoridor
 {
 	public class Pawn
 	{
-		public string Name { get; set; }
+		public char Name { get; set; }
 
 		public int Row { get; set; }
 
 		public int Col { get; set; }
 
-		public Pawn(string name, int row, int col)
+		public Pawn(char name, int row, int col)
 		{
 			Name = name;
 			Row = row;
 			Col = col;
 		}
-
 	}
 }
 

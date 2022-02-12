@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/juliasaliy/Projects/quoridor/quoridor/quoridor.csproj": {}
+    "/Users/artur/Projects/QuoridorApp/quoridor/quoridor.csproj": {}
   },
   "projects": {
-    "/Users/juliasaliy/Projects/quoridor/quoridor/quoridor.csproj": {
+    "/Users/artur/Projects/QuoridorApp/quoridor/quoridor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/juliasaliy/Projects/quoridor/quoridor/quoridor.csproj",
+        "projectUniqueName": "/Users/artur/Projects/QuoridorApp/quoridor/quoridor.csproj",
         "projectName": "quoridor",
-        "projectPath": "/Users/juliasaliy/Projects/quoridor/quoridor/quoridor.csproj",
-        "packagesPath": "/Users/juliasaliy/.nuget/packages/",
-        "outputPath": "/Users/juliasaliy/Projects/quoridor/quoridor/obj/",
+        "projectPath": "/Users/artur/Projects/QuoridorApp/quoridor/quoridor.csproj",
+        "packagesPath": "/Users/artur/.nuget/packages/",
+        "outputPath": "/Users/artur/Projects/QuoridorApp/quoridor/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/juliasaliy/.nuget/NuGet/NuGet.Config"
+          "/Users/artur/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"

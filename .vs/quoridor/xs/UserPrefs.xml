@@ -1,10 +1,11 @@
 ﻿<Properties StartupConfiguration="{0414864E-D163-4EFA-A730-B69437018D6E}|Default">
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="quoridor/Program.cs">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="quoridor/BoardView.cs">
     <Files>
       <File FileName="quoridor/Program.cs" Line="15" Column="1" />
       <File FileName="quoridor/QuoridorEngine.cs" Line="15" Column="2" />
-      <File FileName="quoridor/Board.cs" Line="12" Column="1" />
+      <File FileName="quoridor/BoardView.cs" Line="11" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -19,10 +20,10 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.quoridor PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.quoridor PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <Xamarin.Addins.Core.Project ActiveDebugTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.6EBEF788-EA43-43F8-9DEC-A9D6A9973BD3" />
 </Properties>

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "q5dFLS0LtRrE/FqBxJXYG3jpN+Eghp1QTXpyVsfy4qs5VKpU0+85rSw5JZigAsOFnFr0yyo3twyHgIzi0RlXmw==",
+  "dgSpecHash": "EqBADOzRCRsh9Gr5t36+q3LTVSisnl3VHvca0FPoNksplqXfdkrF1mlfzZCvLFWj0+sdlsPj1yFF5TwjW6+Ung==",
   "success": true,
-  "projectFilePath": "/Users/juliasaliy/Projects/quoridor/quoridor/quoridor.csproj",
+  "projectFilePath": "/Users/artur/Projects/QuoridorApp/quoridor/quoridor.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

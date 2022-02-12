@@ -5,9 +5,9 @@ namespace quoridor
     {
         public static int Main(string[] args)
         {
-            
-            BoardView board = new();
-            board.DrawBoard();
+
+            Controller controller = new Controller();
+            controller.Start();
             return (int)ReturnCode.Success;
         }
     }
