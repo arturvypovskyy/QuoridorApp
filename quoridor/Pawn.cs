@@ -9,7 +9,7 @@ namespace quoridor
 
 		public int Col { get; set; }
 
-		public Pawn(char name, int row, int col)
+		public Pawn(char name, int col, int row)
 		{
 			Name = name;
 			Row = row;

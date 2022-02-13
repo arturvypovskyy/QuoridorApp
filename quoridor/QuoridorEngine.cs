@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace quoridor
 {
 	public class QuoridorEngine
@@ -9,46 +10,38 @@ namespace quoridor
 
 		public List<Pawn> possibleMoves = new();
 
-		public static Player playerA = new('A', 10);
+		private static readonly Player playerA = new('A', 10);
 
-		public static Player playerB = new('B', 10);
+		private static readonly Player playerB = new('B', 10);
 
 		public Player currentPlayer = playerA;
 
 
 		public void GameInitializer()
 		{
-			PawnsOnBoard.Add(new Pawn(name: 'A', row: 1, col: 5 ));
-			PawnsOnBoard.Add(new Pawn(name: 'B', row: 9, col: 5));
+			PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
+			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
 		}
 
 
-		public void MovePiece(char name, int toRow, int toCol)
+		public void MovePiece(char name, int toCol, int toRow)
 		{
 			Pawn? pawn = GetPawn(name);
 			if (pawn is not null)
 			{
 				SetPossibleMoves(pawn);
-				OutputPossibleMoves(possibleMoves);
-				if (toRow <= 0 || toRow > 9)
-				{
-					Console.WriteLine("Impossible \'toRow\' parametr");
-				}
-				else if (toCol <= 0 || toCol > 9)
-				{
-					Console.WriteLine("Impossible \'toCol\' parametr");
-				}
-				else if (!ContainsPawn(new Pawn(name, toRow, toCol), possibleMoves))
+				if (!ContainsPawn(new Pawn(name, toCol, toRow), possibleMoves))
 				{
 					Console.WriteLine("Forbidden move");
+					ShowPossibleMoves(possibleMoves);
 				}
 				else
 				{
-					PawnsOnBoard.Add(new Pawn(pawn.Name, toRow, toCol));
+					PawnsOnBoard.Add(new Pawn(name: pawn.Name, col: toCol, row: toRow));
 					PawnsOnBoard.Remove(pawn);
-					possibleMoves.Clear();
 					ChangePlayer();
 				}
+				possibleMoves.Clear();
 			}
 			else
 			{
@@ -57,16 +50,17 @@ namespace quoridor
 		}
 
 
-		private void OutputPossibleMoves(List<Pawn> pawns)
+		private static void ShowPossibleMoves(List<Pawn> pawns)
 		{
+			Console.WriteLine("Possible moves:");
 			foreach (var pawn in pawns)
 			{
-				Console.WriteLine($"{pawn.Name}  {pawn.Row}  {pawn.Col}");
+				Console.WriteLine($"{pawn.Name} col: {pawn.Col}  row: {pawn.Row}");
 			}
 		}
 
 
-		private bool ContainsPawn(Pawn pawn, List<Pawn> pawns)
+		private static bool ContainsPawn(Pawn pawn, List<Pawn> pawns)
 		{
 			foreach (var possiblePawn in pawns)
 			{
@@ -81,14 +75,23 @@ namespace quoridor
 
 		public void SetPossibleMoves(Pawn pawn)
 		{
-			possibleMoves.Add(new Pawn(pawn.Name, row: pawn.Row + 1, col: pawn.Col));
-			possibleMoves.Add(new Pawn(pawn.Name, row: pawn.Row - 1, col: pawn.Col));
-			possibleMoves.Add(new Pawn(pawn.Name, row: pawn.Row, col: pawn.Col + 1));
-			possibleMoves.Add(new Pawn(pawn.Name, row: pawn.Row, col: pawn.Col - 1));
+			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col,     row: pawn.Row + 1));
+			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col,     row: pawn.Row - 1));
+			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col + 1, row: pawn.Row));
+			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col - 1, row: pawn.Row));
+
+			for(int i = 0; i < possibleMoves.Count; i++)
+			{
+				Pawn possibleMove = possibleMoves[i];
+				if (possibleMove.Col > 9 || possibleMove.Col < 1 || possibleMove.Row > 9 || possibleMove.Row < 1)
+				{
+					possibleMoves.Remove(possibleMove);
+				}
+			}
 		}
 
 
-		public void SetWall(char? orientation,int toRow, int toCol)
+		public void SetWall(char? orientation, int toRow, int toCol)
 		{
 				if (orientation is null)
 				{
@@ -118,6 +121,7 @@ namespace quoridor
 			}
 			return null;
 		}
+
 
 		public void ChangePlayer()
 		{

@@ -5,14 +5,14 @@ namespace quoridor
     {
         public string Name { get; set; } = string.Empty;
 
-        public int ToCol { get; set; } = -1;
+        public char ToCol { get; set; }
 
-        public int ToRow { get; set; } = -1;
+        public char ToRow { get; set; }
 
         public char? Orientation { get; set; } = null;
 
 
-        public Command(string name = "", int toRow = -1, int toCol = -1, char? orientation = null)
+        public Command(string name = "", char toCol = 'p', char toRow = 'p', char? orientation = null)
         {
             Name = name;
             ToCol = toCol;
@@ -27,7 +27,7 @@ namespace quoridor
         }
 
 
-        public void SetCoordinates(int toRow, int toCol)
+        public void SetCoordinates(char toCol, char toRow)
         {
             ToCol = toCol;
             ToRow = toRow;

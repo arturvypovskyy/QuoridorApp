@@ -39,7 +39,7 @@ namespace quoridor
 				if (i % 2 == 0)
 				{
 					counter ++;
-					rowString = String.Format("   _   _   _   _   _   _   _   _   _ \n" +
+					rowString = string.Format("   _   _   _   _   _   _   _   _   _ \n" +
 											$"{counter}" + " |{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{10}|{11}|{12}|{13}|{14}|{15}|{16}|\n" +
 											 "   ‾   ‾   ‾   ‾   ‾   ‾   ‾   ‾   ‾ \n",
 										row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
@@ -47,7 +47,7 @@ namespace quoridor
 				}
 				else
 				{
-					rowString = String.Format( " {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16}    {17}",
+					rowString = string.Format( "   {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16}  {17}",
 										row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
 										row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], counter);
 				}
@@ -86,17 +86,19 @@ namespace quoridor
 
 		public void DrawWall(Wall wall)
 		{
+			int row = wall.Row * 2 - 1;
+			int col = wall.Col * 2 - 1;
 			if (wall.Orientation == 'h')
 			{
-				boardMatrix[wall.Row, wall.Col - 1] = '█';
-				boardMatrix[wall.Row, wall.Col] = '█';
-				boardMatrix[wall.Row, wall.Col + 1] = '█';
+				boardMatrix[row, col + 1] = '█';
+				boardMatrix[row, col] = '█';
+				boardMatrix[row, col - 1] = '█';
 			}
-			else
+			else if (wall.Orientation == 'v')
 			{
-				boardMatrix[wall.Row + 1, wall.Col] = '█';
-				boardMatrix[wall.Row, wall.Col] = '█';
-				boardMatrix[wall.Row - 1, wall.Col] = '█';
+				boardMatrix[row + 1, col] = '█';
+				boardMatrix[row, col] = '█';
+				boardMatrix[row - 1, col] = '█';
 			}
 		}
 
@@ -132,32 +134,44 @@ namespace quoridor
 		}
 
 
-		public bool TryParse(string args, out Command command)
+		public static bool TryParse(string args, out Command command)
 		{
 			var input = args.Split();
 
-			var possibleCommands = new string[] {"move", "jump", "wall"};
-
-			if (possibleCommands.Contains(input[0]))
+			if (input[0] == "move" && input[1].Length == 2)
 			{
-				if (input.Length == 3 || input.Length == 4)
-				{
-					if (int.TryParse(input[1], out int toRow) && int.TryParse(input[2], out int toCol))
-					{
-						if (input.Length > 3 && char.TryParse(input[3], out char orientation))
-						{
-							command = new Command(input[0], toRow, toCol, orientation);
-						}
-						else
-						{
-							command = new Command(input[0], toRow, toCol);
-						}
-						return true;
-					}
-				}
+				char toCol = input[1][0];
+				char toRow = input[1][1];
+				command = new Command(input[0], toCol, toRow);
+				return true; //TODO: move out
 			}
-			command = new();
-			return false;
+			else if (input[0] == "wall" && input[1].Length == 3)
+			{
+				char toCol = input[1][0];
+				char toRow = input[1][1];
+				char orientation = input[1][2];
+				command = new Command(input[0], toCol, toRow, orientation);
+				return true;
+			}
+			else
+			{
+				command = new();
+				return false;
+			}
+
+
+                //if (char.TryParse(input[], out char toCol) && int.TryParse(input[2], out int toCol))
+                //{
+                //	if (input.Length > 3 && char.TryParse(input[3], out char orientation))
+                //	{
+                //		command = new Command(input[0], toRow, toCol, orientation);
+                //	}
+                //	else
+                //	{
+                //		command = new Command(input[0], toRow, toCol);
+                //	}
+                //	return true;
+                //}
 		}
 	}
 }
