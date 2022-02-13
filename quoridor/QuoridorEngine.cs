@@ -10,6 +10,8 @@ namespace quoridor
 
 		public List<Pawn> possibleMoves = new();
 
+		public List<Wall> possibleWalls = new();
+
 		private static readonly Player playerA = new('A', 10);
 
 		private static readonly Player playerB = new('B', 10);
@@ -21,6 +23,7 @@ namespace quoridor
 		{
 			PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
 			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
+			GetAllPossibleWalls();
 		}
 
 
@@ -64,7 +67,9 @@ namespace quoridor
 		{
 			foreach (var possiblePawn in pawns)
 			{
-				if (pawn.Name == possiblePawn.Name && pawn.Row == possiblePawn.Row && pawn.Col == possiblePawn.Col)
+				if (pawn.Name == possiblePawn.Name &&
+					pawn.Row == possiblePawn.Row &&
+					pawn.Col == possiblePawn.Col)
 				{
 					return true;
 				}
@@ -83,7 +88,10 @@ namespace quoridor
 			for(int i = 0; i < possibleMoves.Count; i++)
 			{
 				Pawn possibleMove = possibleMoves[i];
-				if (possibleMove.Col > 9 || possibleMove.Col < 1 || possibleMove.Row > 9 || possibleMove.Row < 1)
+				if (possibleMove.Col > 9 ||
+					possibleMove.Col < 1 ||
+					possibleMove.Row > 9 ||
+					possibleMove.Row < 1)
 				{
 					possibleMoves.Remove(possibleMove);
 				}
@@ -93,20 +101,67 @@ namespace quoridor
 
 		public void SetWall(char? orientation, int toRow, int toCol)
 		{
-				if (orientation is null)
+			if (orientation is null)
+			{
+				Console.WriteLine("Incorrect orientation");
+			}
+			else if (currentPlayer.WallsLeft == 0)
+			{
+				Console.WriteLine("No walls left");
+			}
+			else if (!ContainsWall(new Wall(orientation: orientation, row: toRow, col: toCol), possibleWalls))
+			{
+				Console.WriteLine("Forbidden wall");
+			}
+			else
+			{
+				WallsOnBoard.Add(new Wall(orientation, toRow, toCol));
+				currentPlayer.WallsLeft -= 1;
+
+				possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol && x.Row == toRow);
+				possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow);
+
+				if (orientation == 'h')
 				{
-					Console.WriteLine("Incorrect orientation");
+					possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol + 1 && x.Row == toRow);
+					possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol - 1 && x.Row == toRow);
 				}
-				else if (currentPlayer.WallsLeft == 0)
+				else if(orientation == 'v')
 				{
-					Console.WriteLine("No walls left");
+					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
+					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
 				}
-				else
+
+				ChangePlayer();
+			}
+		}
+
+
+		private void GetAllPossibleWalls()
+		{
+			for (int i = 1; i < 9; i++)
+			{
+				for (int j = 1; j < 9; j++)
 				{
-					WallsOnBoard.Add(new Wall(orientation, toRow, toCol));
-					currentPlayer.WallsLeft -= 1;
-					ChangePlayer();
+					possibleWalls.Add(new Wall(orientation: 'h', col: i, row: j));
+					possibleWalls.Add(new Wall(orientation: 'v', col: i, row: j));
 				}
+			}
+		}
+
+
+		private static bool ContainsWall(Wall wall, List<Wall> possibleWalls)
+		{
+			foreach (var possibleWall in possibleWalls)
+			{
+				if (possibleWall.Col == wall.Col &&
+					possibleWall.Row == wall.Row &&
+					possibleWall.Orientation == wall.Orientation)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 
