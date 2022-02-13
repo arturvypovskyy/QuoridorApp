@@ -7,6 +7,8 @@ namespace quoridor
 
 		public List<Wall> shadowWalls = new();
 
+		public char CurrentPlayerName { get; set; }
+
 		public char[,] boardMatrix = new char[17, 17];
 
 		public void SetEmptyMatrix()
@@ -23,6 +25,8 @@ namespace quoridor
 
 		public void DrawBoard()
 		{
+			int counter = 0;
+			Console.WriteLine("   A   B   C   D   E   F   G   H   I");
 			for(int i = 0; i <= 16; i++)
 			{
 				var row = new char[17];
@@ -30,23 +34,27 @@ namespace quoridor
 				{
 					row[j] = boardMatrix[i,j];
 				}
-
 				string rowString;
 
 				if (i % 2 == 0)
 				{
-					rowString = String.Format(" _   _   _   _   _   _   _   _   _ \n" +
-											"|{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{10}|{11}|{12}|{13}|{14}|{15}|{16}|\n" +
-											" ‾   ‾   ‾   ‾   ‾   ‾   ‾   ‾   ‾ \n",
-										row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]);
+					counter ++;
+					rowString = String.Format("   _   _   _   _   _   _   _   _   _ \n" +
+											$"{counter}" + " |{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{10}|{11}|{12}|{13}|{14}|{15}|{16}|\n" +
+											 "   ‾   ‾   ‾   ‾   ‾   ‾   ‾   ‾   ‾ \n",
+										row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
+										row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]);
 				}
 				else
 				{
-					rowString = String.Format( " {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16}",
-										row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]);
+					rowString = String.Format( " {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11} {12} {13} {14} {15} {16}    {17}",
+										row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8],
+										row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], counter);
 				}
 				Console.WriteLine(rowString);
 			}
+			Console.WriteLine("     S   T   U   V   W   X   Y   Z");
+			Console.WriteLine("");
 		}
 
 
@@ -106,7 +114,7 @@ namespace quoridor
 		{
 			while (true)
 			{
-				Console.WriteLine("Your move:");
+				Console.WriteLine($"{CurrentPlayerName} move:");
 				string? args = Console.ReadLine();
 
 				if (args is null)
@@ -132,17 +140,20 @@ namespace quoridor
 
 			if (possibleCommands.Contains(input[0]))
 			{
-				if (int.TryParse(input[1], out int toRow) && int.TryParse(input[2], out int toCol))
+				if (input.Length == 3 || input.Length == 4)
 				{
-					if (input.Length > 3 && char.TryParse(input[3], out char orientation))
+					if (int.TryParse(input[1], out int toRow) && int.TryParse(input[2], out int toCol))
 					{
-						command = new Command(input[0], toRow, toCol, orientation);
+						if (input.Length > 3 && char.TryParse(input[3], out char orientation))
+						{
+							command = new Command(input[0], toRow, toCol, orientation);
+						}
+						else
+						{
+							command = new Command(input[0], toRow, toCol);
+						}
+						return true;
 					}
-					else
-					{
-						command = new Command(input[0], toRow, toCol);
-					}
-					return true;
 				}
 			}
 			command = new();

@@ -22,7 +22,8 @@ namespace quoridor
 		public void ViewDidLoad()
 		{
 			boardView.shadownPawns = quoridorEngine.PawnsOnBoard;
-			boardView.shadowWalls = quoridorEngine.WallsOnBoard; 
+			boardView.shadowWalls = quoridorEngine.WallsOnBoard;
+			boardView.CurrentPlayerName = quoridorEngine.currentPlayer.PawnName;
 			boardView.ViewDisplay();
 		}
 
