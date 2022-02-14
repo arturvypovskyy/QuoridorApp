@@ -97,6 +97,44 @@ namespace quoridor
 					possibleMoves.Remove(possibleMove);
 				}
 			}
+
+			//possible jump
+			//forward
+			var pawnsToJump = PawnsOnBoard
+				.Select(x => x)
+				.Where(x => x.Col == pawn.Col && x.Row == pawn.Row - 1);
+			if (pawnsToJump.Any())
+			{
+				possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col, row: pawn.Row - 2));
+			}
+			//backward
+			pawnsToJump = PawnsOnBoard
+				.Select(x => x)
+				.Where(x => x.Col == pawn.Col && x.Row == pawn.Row + 1);
+			if (pawnsToJump.Any())
+			{
+				possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col, row: pawn.Row + 2));
+			}
+			//to the left
+			pawnsToJump = PawnsOnBoard
+				.Select(x => x)
+				.Where(x => x.Col == pawn.Col - 1 && x.Row == pawn.Row);
+			if (pawnsToJump.Any())
+			{
+				possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col - 2, row: pawn.Row));
+			}
+			//to the right
+			pawnsToJump = PawnsOnBoard
+				.Select(x => x)
+				.Where(x => x.Col == pawn.Col + 1 && x.Row == pawn.Row);
+			if (pawnsToJump.Any())
+			{
+				possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col + 2, row: pawn.Row));
+			}
+
+
+
+
 			//removing possible moves according to walls
 			//wall forward
 			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row - 1), WallsOnBoard))
@@ -134,8 +172,6 @@ namespace quoridor
 			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 1 && x.Row == pawn.Row);
 			}
-
-
 		}
 
 
