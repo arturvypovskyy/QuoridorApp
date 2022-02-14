@@ -143,7 +143,7 @@ namespace quoridor
 				char toCol = input[1][0];
 				char toRow = input[1][1];
 				command = new Command(input[0], toCol, toRow);
-				return true; //TODO: move out
+				return true; 
 			}
 			else if (input[0] == "wall" && input[1].Length == 3)
 			{

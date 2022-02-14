@@ -80,11 +80,12 @@ namespace quoridor
 
 		public void SetPossibleMoves(Pawn pawn)
 		{
+			//possible moves from the start
 			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col,     row: pawn.Row + 1));
 			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col,     row: pawn.Row - 1));
 			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col + 1, row: pawn.Row));
 			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col - 1, row: pawn.Row));
-
+			//removing impossible moves on board
 			for(int i = 0; i < possibleMoves.Count; i++)
 			{
 				Pawn possibleMove = possibleMoves[i];
@@ -96,6 +97,25 @@ namespace quoridor
 					possibleMoves.Remove(possibleMove);
 				}
 			}
+			//removing impossible moves according to walls
+			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row - 1), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row - 1);
+			}
+			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col - 1, row: pawn.Row - 1), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row - 1);
+			}
+
+			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row + 1);
+			}
+			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col - 1, row: pawn.Row), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row + 1);
+			}
+
 		}
 
 
@@ -131,7 +151,6 @@ namespace quoridor
 					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
 					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
 				}
-
 				ChangePlayer();
 			}
 		}
