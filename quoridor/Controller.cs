@@ -55,20 +55,27 @@ namespace quoridor
 			};
 
 			Console.WriteLine($"Your command is {command.Name} col: {command.ToCol}, row: {command.ToRow} optional{command.Orientation}");
-
-			switch (command.Name)
+			try
 			{
-				case "move":
-					int toCol = pawnsColumnGrid[command.ToCol];
-					int toRow = int.Parse(Convert.ToString(command.ToRow));
-					Console.WriteLine($"Your command is {quoridorEngine.currentPlayer.PawnName} col: {toCol}, row: {toRow}");
-					quoridorEngine.MovePiece(name: quoridorEngine.currentPlayer.PawnName, toCol: toCol, toRow: toRow);
-					break;
-				case "wall":
-					int toColWall = wallColumnGrid[command.ToCol];
-					int toRowWall = int.Parse(Convert.ToString(command.ToRow));
-					quoridorEngine.SetWall(orientation: command.Orientation, toCol: toColWall, toRow: toRowWall);
-					break;
+
+				switch (command.Name)
+				{
+					case "move":
+						int toCol = pawnsColumnGrid[command.ToCol];
+						int toRow = int.Parse(Convert.ToString(command.ToRow));
+						Console.WriteLine($"Your command is {quoridorEngine.currentPlayer.PawnName} col: {toCol}, row: {toRow}");
+						quoridorEngine.MovePiece(name: quoridorEngine.currentPlayer.PawnName, toCol: toCol, toRow: toRow);
+						break;
+					case "wall":
+						int toColWall = wallColumnGrid[command.ToCol];
+						int toRowWall = int.Parse(Convert.ToString(command.ToRow));
+						quoridorEngine.SetWall(orientation: command.Orientation, toCol: toColWall, toRow: toRowWall);
+						break;
+				}
+			}
+			catch
+			{
+				Console.WriteLine("Incorrect input");
 			}
 		}
 

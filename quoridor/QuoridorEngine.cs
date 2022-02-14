@@ -32,7 +32,7 @@ namespace quoridor
 			Pawn? pawn = GetPawn(name);
 			if (pawn is not null)
 			{
-				SetPossibleMoves(pawn);
+				GetPossibleMoves(pawn);
 				if (!ContainsPawn(new Pawn(name, toCol, toRow), possibleMoves))
 				{
 					Console.WriteLine("Forbidden move");
@@ -78,7 +78,7 @@ namespace quoridor
 		}
 
 
-		public void SetPossibleMoves(Pawn pawn)
+		public void GetPossibleMoves(Pawn pawn)
 		{
 			//possible moves from the start
 			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col,     row: pawn.Row + 1));
@@ -97,7 +97,8 @@ namespace quoridor
 					possibleMoves.Remove(possibleMove);
 				}
 			}
-			//removing impossible moves according to walls
+			//removing possible moves according to walls
+			//wall forward
 			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row - 1), WallsOnBoard))
 			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row - 1);
@@ -106,7 +107,7 @@ namespace quoridor
 			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row - 1);
 			}
-
+			//wall backward
 			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row), WallsOnBoard))
 			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row + 1);
@@ -115,6 +116,25 @@ namespace quoridor
 			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row + 1);
 			}
+			//wall to the left
+			if (ContainsWall(new Wall(orientation: 'v', col: pawn.Col - 1, row: pawn.Row), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 1 && x.Row == pawn.Row);
+			}
+			if (ContainsWall(new Wall(orientation: 'v', col: pawn.Col - 1, row: pawn.Row - 1), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 1 && x.Row == pawn.Row);
+			}
+			//wall to the right
+			if (ContainsWall(new Wall(orientation: 'v', col: pawn.Col, row: pawn.Row), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 1 && x.Row == pawn.Row);
+			}
+			if (ContainsWall(new Wall(orientation: 'v', col: pawn.Col, row: pawn.Row - 1), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 1 && x.Row == pawn.Row);
+			}
+
 
 		}
 
