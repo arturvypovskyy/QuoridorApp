@@ -21,8 +21,10 @@ namespace quoridor
 
 		public void GameInitializer()
 		{
-			PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
-			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
+			//PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
+			//PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
+			PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 5));
+			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 6));
 			GetAllPossibleWalls();
 		}
 
@@ -131,11 +133,22 @@ namespace quoridor
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row - 1);
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row - 2);
 			}
+			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row - 2), WallsOnBoard) ||
+				ContainsWall(new Wall(orientation: 'h', col: pawn.Col - 1, row: pawn.Row - 2), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row - 2);
+			}
+
 			//wall backward
 			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row), WallsOnBoard) ||
 				ContainsWall(new Wall(orientation: 'h', col: pawn.Col - 1, row: pawn.Row), WallsOnBoard))
 			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row + 1);
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row + 2);
+			}
+			if (ContainsWall(new Wall(orientation: 'h', col: pawn.Col, row: pawn.Row + 1), WallsOnBoard) ||
+				ContainsWall(new Wall(orientation: 'h', col: pawn.Col - 1, row: pawn.Row + 1), WallsOnBoard))
+			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row + 2);
 			}
 			//wall to the left
@@ -145,11 +158,21 @@ namespace quoridor
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 1 && x.Row == pawn.Row);
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 2 && x.Row == pawn.Row);
 			}
+			if (ContainsWall(new Wall(orientation: 'v', col: pawn.Col - 2, row: pawn.Row), WallsOnBoard) ||
+				ContainsWall(new Wall(orientation: 'v', col: pawn.Col - 2, row: pawn.Row - 1), WallsOnBoard))
+			{
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 2 && x.Row == pawn.Row);
+			}
 			//wall to the right
 			if (ContainsWall(new Wall(orientation: 'v', col: pawn.Col, row: pawn.Row), WallsOnBoard) ||
 				ContainsWall(new Wall(orientation: 'v', col: pawn.Col, row: pawn.Row - 1), WallsOnBoard))
 			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 1 && x.Row == pawn.Row);
+				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 2 && x.Row == pawn.Row);
+			}
+			if (ContainsWall(new Wall(orientation: 'v', col: pawn.Col + 1, row: pawn.Row), WallsOnBoard) ||
+				ContainsWall(new Wall(orientation: 'v', col: pawn.Col + 1, row: pawn.Row - 1), WallsOnBoard))
+			{
 				possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 2 && x.Row == pawn.Row);
 			}
 
