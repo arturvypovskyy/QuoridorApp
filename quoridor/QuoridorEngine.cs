@@ -21,9 +21,11 @@ namespace quoridor
 
 		public void GameInitializer()
 		{
-            PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 5));
-            PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 6));
-            GetAllPossibleWalls();
+			//PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
+			//PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
+			PawnsOnBoard.Add(new Pawn(name: 'A', col: 4, row: 5));
+			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 5));
+			GetAllPossibleWalls();
 		}
 
 
@@ -214,6 +216,48 @@ namespace quoridor
 						|| WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col - 1 && x.Row == pawn.Row + 1).Any())
 					{
 						possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 1 && x.Row == pawn.Row + 1);
+					}
+				}
+			}
+			//to the left
+			if (PawnsOnBoard.Where(x => x.Col == pawn.Col - 1 && x.Row == pawn.Row).Any())
+			{
+				if (WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col - 2 && x.Row == pawn.Row - 1).Any()
+					|| WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col - 2 && x.Row == pawn.Row).Any())
+				{
+					possibleMoves.Add(new Pawn(pawn.Name, pawn.Col - 1, pawn.Row - 1));
+					possibleMoves.Add(new Pawn(pawn.Name, pawn.Col - 1, pawn.Row + 1));
+
+					if (WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 1 && x.Row == pawn.Row - 1).Any()
+					|| WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 2 && x.Row == pawn.Row - 1).Any())
+					{
+						possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 1 && x.Row == pawn.Row - 1);
+					}
+					if (WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 2 && x.Row == pawn.Row).Any()
+					|| WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 1 && x.Row == pawn.Row).Any())
+					{
+						possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 1 && x.Row == pawn.Row + 1);
+					}
+				}
+			}
+			//to the right
+			if (PawnsOnBoard.Where(x => x.Col == pawn.Col + 1 && x.Row == pawn.Row).Any())
+			{
+				if (WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col + 1 && x.Row == pawn.Row - 1).Any()
+					|| WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col + 1 && x.Row == pawn.Row).Any())
+				{
+					possibleMoves.Add(new Pawn(pawn.Name, pawn.Col + 1, pawn.Row - 1));
+					possibleMoves.Add(new Pawn(pawn.Name, pawn.Col + 1, pawn.Row + 1));
+
+					if (WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col && x.Row == pawn.Row - 1).Any()
+					|| WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col + 1 && x.Row == pawn.Row - 1).Any())
+					{
+						possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 1 && x.Row == pawn.Row - 1);
+					}
+					if (WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col && x.Row == pawn.Row).Any()
+					|| WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col + 1 && x.Row == pawn.Row).Any())
+					{
+						possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col + 1 && x.Row == pawn.Row + 1);
 					}
 				}
 			}
