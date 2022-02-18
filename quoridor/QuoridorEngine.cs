@@ -12,16 +12,16 @@ namespace quoridor
 
 		public List<Wall> possibleWalls = new();
 
-		private static readonly Player playerA = new("white", 'A', 10);
+		private static readonly Player playerA = new('W', 10);
 
-		private static readonly Player playerB = new("black", 'B', 10);
+		private static readonly Player playerB = new('B', 10);
 
 		public Player currentPlayer = playerA;
 
 
 		public void GameInitializer()
 		{
-            PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 9));
+            PawnsOnBoard.Add(new Pawn(name: 'W', col: 5, row: 9));
 			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 1));
             GetAllPossibleWalls();
 		}
@@ -309,7 +309,7 @@ namespace quoridor
 					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
 					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
 				}
-                if (WayExistsFor('A') && WayExistsFor('B'))
+                if (WayExistsFor('W') && WayExistsFor('B'))
                 {
                     ChangePlayer();
                 }
@@ -368,7 +368,7 @@ namespace quoridor
 
 		public void ChangePlayer()
 		{
-			if (currentPlayer.PawnName == 'A')
+			if (currentPlayer.PawnName == 'W')
 			{
 				currentPlayer = playerB;
 			}
@@ -431,7 +431,7 @@ namespace quoridor
 				foreach (var possibleMove in possibleMoves)
 				{
 					//if we reached the goal row
-					int goalRow = playerName == 'A' ? 1 : 9;
+					int goalRow = playerName == 'W' ? 1 : 9;
 					if (possibleMove.Row == goalRow)
 					{
 						// adding removed pawns to the board
@@ -451,7 +451,6 @@ namespace quoridor
 				}
 				//setting new current field
 				currentField = minWeightField;
-
 			}
 		}
 

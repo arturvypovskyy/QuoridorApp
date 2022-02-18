@@ -7,6 +7,7 @@ namespace quoridor
 
 		public QuoridorEngine quoridorEngine = new();
 
+		public Controller() { }
 
 		public void Start()
 		{
@@ -84,9 +85,6 @@ namespace quoridor
 		{
 			CommandRun(boardView.Read());
 		}
-
-
-		public Controller(){}
 	}
 }
 

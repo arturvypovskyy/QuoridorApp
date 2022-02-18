@@ -158,20 +158,6 @@ namespace quoridor
 				command = new();
 				return false;
 			}
-
-
-                //if (char.TryParse(input[], out char toCol) && int.TryParse(input[2], out int toCol))
-                //{
-                //	if (input.Length > 3 && char.TryParse(input[3], out char orientation))
-                //	{
-                //		command = new Command(input[0], toRow, toCol, orientation);
-                //	}
-                //	else
-                //	{
-                //		command = new Command(input[0], toRow, toCol);
-                //	}
-                //	return true;
-                //}
 		}
 	}
 }
