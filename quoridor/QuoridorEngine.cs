@@ -21,11 +21,9 @@ namespace quoridor
 
 		public void GameInitializer()
 		{
-			//PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
-			//PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
-			PawnsOnBoard.Add(new Pawn(name: 'A', col: 4, row: 5));
-			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 5));
-			GetAllPossibleWalls();
+            PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
+            PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
+            GetAllPossibleWalls();
 		}
 
 
@@ -82,6 +80,7 @@ namespace quoridor
 
 		public void GetPossibleMoves(Pawn pawn)
 		{
+			possibleMoves.Clear();
 			//adding possible moves from the start
 			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col,     row: pawn.Row + 1));
 			possibleMoves.Add(new Pawn(pawn.Name, col: pawn.Col,     row: pawn.Row - 1));
@@ -310,8 +309,19 @@ namespace quoridor
 					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
 					possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
 				}
-				ChangePlayer();
-			}
+                if (WayExistsFor('A') && WayExistsFor('B'))
+                {
+                    ChangePlayer();
+                }
+                else
+                {
+                    WallsOnBoard.RemoveAll(x => x.Orientation == orientation && x.Row == toRow && x.Col == toCol);
+                    possibleWalls.Add(new Wall(orientation, toCol, toRow));
+                    currentPlayer.WallsLeft++;
+					Console.WriteLine("Impossible wall");
+                }
+
+            }
 		}
 
 
@@ -368,6 +378,98 @@ namespace quoridor
 			}
 		}
 
+		private bool WayExistsFor(char playerName)
+		{
+			var openList = new List<Field>();
+			var closedList = new List<Field>();
+			var path = new Stack<Field>();
+
+			//finding where path begins 
+			var startPawn = GetPawn(playerName);
+			if (startPawn is null)
+				throw new ArgumentNullException(nameof(startPawn));
+			var currentField = new Field(pawn: startPawn, length: 0);
+
+			// saving pawns on board positions and removing pawns from the board
+			
+				
+			PawnsOnBoard.RemoveAll(x => x.Name == startPawn.Name && x.Col == startPawn.Col && x.Row == startPawn.Row);
+			
+			while (true)
+			{
+				//adding current field to closed list and path stack
+				path.Push(currentField);
+				closedList.Add(currentField);
+				Console.WriteLine($"name : {currentField.Pawn.Name} col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} weight: {currentField.Weight}");
+
+				//generating open list
+				GetPossibleMoves(currentField.Pawn);
+				foreach (var field in closedList)
+				{
+					//removing fields of closed list from possible moves
+					possibleMoves.RemoveAll(x => x.Row == field.Pawn.Row && x.Col == field.Pawn.Col);
+				}
+				//if there is no possible moves
+				if (possibleMoves.Count == 0)
+				{
+					
+                    if (path.Count == 1)
+                    {
+                        path.Pop();
+                        currentField = path.Pop();
+                        closedList.RemoveAll(x => x.Pawn.Row == currentField.Pawn.Row && x.Pawn.Col == currentField.Pawn.Col);
+                        continue;
+                    }
+                    else
+                    {
+                        ShowPath(path);
+                        // adding removed pawns to the board
+
+                        PawnsOnBoard.Add(startPawn);
+
+                        return false;
+                    }
+                }
+				//clear open list from previous iteration
+				openList.Clear();
+				foreach (var possibleMove in possibleMoves)
+				{
+					//if we reached the goal row
+					int goalRow = playerName == 'A' ? 9 : 1;
+					if (possibleMove.Row == goalRow)
+					{
+						ShowPath(path);
+						// adding removed pawns to the board
+
+						PawnsOnBoard.Add(startPawn);
+
+						return true;
+					}
+					openList.Add(new Field(possibleMove, currentField.Length + 10));
+				}
+				//searching for min weight field in open list
+				var minWeightField = openList[0];
+				for (int i = 1; i < openList.Count; i++)
+				{
+					if (openList[i].Weight < minWeightField.Weight)
+					{
+						minWeightField = openList[i];
+					}
+				}
+				//setting new current field
+				currentField = minWeightField;
+
+			}
+		}
+
+
+		private static void ShowPath(Stack<Field> path)
+		{
+			foreach (var field in path)
+			{
+				Console.WriteLine($"col: {field.Pawn.Col} row: {field.Pawn.Row} length: {field.Length} weight: {field.Weight}");
+			}
+		}
 
 		public QuoridorEngine(){}
 	}
