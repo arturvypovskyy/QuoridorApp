@@ -143,7 +143,7 @@ namespace quoridor
 				char toCol = input[1][0];
 				char toRow = input[1][1];
 				command = new Command(input[0], toCol, toRow);
-				return true; 
+				return true;
 			}
 			else if (input[0] == "wall" && input[1].Length == 3)
 			{
@@ -151,6 +151,16 @@ namespace quoridor
 				char toRow = input[1][1];
 				char orientation = input[1][2];
 				command = new Command(input[0], toCol, toRow, orientation);
+				return true;
+			}
+			else if (input[0] == "restart")
+			{
+				command = new Command("restart");
+				return true;
+			}
+			else if (input[0] == "exit")
+			{
+				command = new Command("exit");
 				return true;
 			}
 			else

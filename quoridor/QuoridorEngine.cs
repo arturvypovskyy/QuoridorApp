@@ -18,17 +18,36 @@ namespace quoridor
 
 		public Player currentPlayer = playerA;
 
+		public bool GameEnded
+        {
+			get
+			{
+				return IsGameEnded();
+			}
+		}
+
+		public QuoridorEngine() { }
+
 
 		public void GameInitializer()
 		{
-            PawnsOnBoard.Add(new Pawn(name: 'W', col: 5, row: 9));
-			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 1));
-            GetAllPossibleWalls();
+			PawnsOnBoard.Clear();
+			WallsOnBoard.Clear();
+			//PawnsOnBoard.Add(new Pawn(name: 'W', col: 5, row: 9));
+			//PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 1));
+			PawnsOnBoard.Add(new Pawn(name: 'W', col: 5, row: 2));
+			PawnsOnBoard.Add(new Pawn(name: 'B', col: 6, row: 1));
+			GetAllPossibleWalls();
 		}
 
 
 		public void MovePiece(char name, int toCol, int toRow)
 		{
+			//bool gameEnded = IsGameEnded();
+			if (GameEnded)
+			{
+				return;
+			}
 			Pawn? pawn = GetPawn(name);
 			if (pawn is not null)
 			{
@@ -42,7 +61,10 @@ namespace quoridor
 				{
 					PawnsOnBoard.Add(new Pawn(name: pawn.Name, col: toCol, row: toRow));
 					PawnsOnBoard.Remove(pawn);
-					ChangePlayer();
+					if (!GameEnded)
+					{
+						ChangePlayer();
+					}
 				}
 				possibleMoves.Clear();
 			}
@@ -279,6 +301,10 @@ namespace quoridor
 
 		public void SetWall(char? orientation, int toRow, int toCol)
 		{
+			if (IsGameEnded())
+			{
+				return;
+			}
 			if (orientation is null)
 			{
 				Console.WriteLine("Incorrect orientation");
@@ -311,7 +337,10 @@ namespace quoridor
 				}
                 if (WayExistsFor('W') && WayExistsFor('B'))
                 {
-                    ChangePlayer();
+					if (!IsGameEnded())
+					{
+						ChangePlayer();
+					}
                 }
                 else
                 {
@@ -327,6 +356,7 @@ namespace quoridor
 
 		private void GetAllPossibleWalls()
 		{
+			possibleWalls.Clear();
 			for (int i = 1; i < 9; i++)
 			{
 				for (int j = 1; j < 9; j++)
@@ -455,7 +485,16 @@ namespace quoridor
 		}
 
 
-		public QuoridorEngine(){}
+		public void Exit()
+		{
+			System.Environment.Exit((int) ReturnCode.Success);
+		}
+
+
+		public bool IsGameEnded()
+		{
+			return PawnsOnBoard.Where(x => (x.Name == 'W' && x.Row == 1) || (x.Name == 'B' && x.Row == 9)).Any();
+		}
 	}
 }
 

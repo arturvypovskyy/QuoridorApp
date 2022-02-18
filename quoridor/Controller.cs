@@ -72,6 +72,12 @@ namespace quoridor
 						int toRowWall = int.Parse(Convert.ToString(command.ToRow));
 						quoridorEngine.SetWall(orientation: command.Orientation, toCol: toColWall, toRow: toRowWall);
 						break;
+					case "restart":
+						quoridorEngine.GameInitializer();
+						break;
+					case "exit":
+						quoridorEngine.Exit();
+						break;
 				}
 			}
 			catch
