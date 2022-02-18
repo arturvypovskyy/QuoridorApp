@@ -12,17 +12,17 @@ namespace quoridor
 
 		public List<Wall> possibleWalls = new();
 
-		private static readonly Player playerA = new('A', 10);
+		private static readonly Player playerA = new("white", 'A', 10);
 
-		private static readonly Player playerB = new('B', 10);
+		private static readonly Player playerB = new("black", 'B', 10);
 
 		public Player currentPlayer = playerA;
 
 
 		public void GameInitializer()
 		{
-            PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 1));
-            PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 9));
+            PawnsOnBoard.Add(new Pawn(name: 'A', col: 5, row: 9));
+			PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 1));
             GetAllPossibleWalls();
 		}
 
@@ -378,6 +378,7 @@ namespace quoridor
 			}
 		}
 
+
 		private bool WayExistsFor(char playerName)
 		{
 			var openList = new List<Field>();
@@ -391,16 +392,15 @@ namespace quoridor
 			var currentField = new Field(pawn: startPawn, length: 0);
 
 			// saving pawns on board positions and removing pawns from the board
-			
-				
 			PawnsOnBoard.RemoveAll(x => x.Name == startPawn.Name && x.Col == startPawn.Col && x.Row == startPawn.Row);
-			
+
 			while (true)
 			{
 				//adding current field to closed list and path stack
 				path.Push(currentField);
 				closedList.Add(currentField);
-				Console.WriteLine($"name : {currentField.Pawn.Name} col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} weight: {currentField.Weight}");
+				Console.WriteLine($"name : {currentField.Pawn.Name} " +
+                    $"col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} weight: {currentField.Weight}");
 
 				//generating open list
 				GetPossibleMoves(currentField.Pawn);
@@ -412,7 +412,6 @@ namespace quoridor
 				//if there is no possible moves
 				if (possibleMoves.Count == 0)
 				{
-					
                     if (path.Count == 1)
                     {
                         path.Pop();
@@ -422,11 +421,8 @@ namespace quoridor
                     }
                     else
                     {
-                        ShowPath(path);
                         // adding removed pawns to the board
-
                         PawnsOnBoard.Add(startPawn);
-
                         return false;
                     }
                 }
@@ -435,14 +431,11 @@ namespace quoridor
 				foreach (var possibleMove in possibleMoves)
 				{
 					//if we reached the goal row
-					int goalRow = playerName == 'A' ? 9 : 1;
+					int goalRow = playerName == 'A' ? 1 : 9;
 					if (possibleMove.Row == goalRow)
 					{
-						ShowPath(path);
 						// adding removed pawns to the board
-
 						PawnsOnBoard.Add(startPawn);
-
 						return true;
 					}
 					openList.Add(new Field(possibleMove, currentField.Length + 10));
@@ -462,14 +455,6 @@ namespace quoridor
 			}
 		}
 
-
-		private static void ShowPath(Stack<Field> path)
-		{
-			foreach (var field in path)
-			{
-				Console.WriteLine($"col: {field.Pawn.Col} row: {field.Pawn.Row} length: {field.Length} weight: {field.Weight}");
-			}
-		}
 
 		public QuoridorEngine(){}
 	}
