@@ -7,7 +7,10 @@ namespace quoridor
 
 		public QuoridorEngine quoridorEngine = new();
 
+		public Bot bot = new('W', true);
+
 		public Controller() { }
+
 
 		public void Start()
 		{
@@ -29,8 +32,9 @@ namespace quoridor
 		}
 
 
-		private void CommandRun(Command command)
+        private void CommandRun(Command command)
 		{
+
 			var pawnsColumnGrid = new Dictionary<char, int>()
 			{
 				{'A', 1},
@@ -54,11 +58,9 @@ namespace quoridor
 				{'Y', 7},
 				{'Z', 8}
 			};
-
 			Console.WriteLine($"Your command is {command.Name} col: {command.ToCol}, row: {command.ToRow} optional{command.Orientation}");
 			try
 			{
-
 				switch (command.Name)
 				{
 					case "move":
@@ -89,7 +91,48 @@ namespace quoridor
 
 		public void Read()
 		{
-			CommandRun(boardView.Read());
+			if (quoridorEngine.currentPlayer.PawnName == bot.PawnName && bot.IsWorking)
+			{
+				BotAction();
+			}
+			else
+			{
+				CommandRun(boardView.Read());
+			}
+		}
+
+
+		public void BotAction()
+		{
+			if (!bot.IsWorking)
+			{
+				return;
+			}
+			List<string> commands = new() { "move", "wall" };
+			if (quoridorEngine.currentPlayer.WallsLeft == 0)
+				commands.Remove("wall");
+
+			Random random = new();
+			switch (commands[random.Next(commands.Count)])
+			{
+				case "move":
+					var pawn = quoridorEngine.GetPawn(bot.PawnName);
+					if (pawn is null)
+						throw new ArgumentNullException(nameof(pawn));
+					quoridorEngine.GetPossibleMoves(pawn);
+					var possibleMove = quoridorEngine.possibleMoves[random.Next(quoridorEngine.possibleMoves.Count)];
+					quoridorEngine.MovePiece(name: bot.PawnName, toCol: possibleMove.Col, toRow: possibleMove.Row);
+					break;
+				case "wall":
+					while (true)
+					{
+						var possibleWall = quoridorEngine.possibleWalls[random.Next(quoridorEngine.possibleWalls.Count)];
+						quoridorEngine.SetWall(orientation: possibleWall.Orientation, toCol: possibleWall.Col, toRow: possibleWall.Row);
+						if (quoridorEngine.WallsOnBoard.Where(x => x.Orientation == possibleWall.Orientation && x.Col == possibleWall.Col && x.Row == possibleWall.Row).Any())
+							break;
+					}
+					break;
+			}
 		}
 	}
 }

@@ -11,6 +11,7 @@ namespace quoridor
 
 		public char[,] boardMatrix = new char[17, 17];
 
+
 		public void SetEmptyMatrix()
 		{
 			for (int i = 0; i<= 16; i++)
