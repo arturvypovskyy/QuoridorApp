@@ -170,6 +170,76 @@ namespace quoridor
 				return false;
 			}
 		}
+
+
+		public bool IsPlayingWithBot()
+		{
+			Console.WriteLine("Welcome at the Quoriod App!");
+			while (true)
+			{
+				Console.WriteLine("Choose player mode (bot/players):");
+				var answer = Console.ReadLine();
+				switch (answer)
+				{
+					case "bot":
+						return true;
+					case "players":
+						return false;
+					default:
+						Console.WriteLine("Incorrect input. Try again");
+						break;
+				}
+			}
+		}
+
+
+		public char ChooseSide()
+		{
+			while (true)
+			{
+				Console.WriteLine("Okay. Choose your side (white/black)");
+				var answer = Console.ReadLine();
+				switch (answer)
+				{
+					case "white":
+						return 'B';
+					case "black":
+						return 'W';
+					default:
+						Console.WriteLine("Incorrect input. Try again");
+						break;
+				}
+			}
+		}
+
+
+		public void Help()
+		{
+			Console.WriteLine("* \"move <column><row>\" - moves a pawn. For example: \"move E2\"\n" +
+				"* \"wall <column><row><orientation>\" - sets a wall. For example: \"wall W8h\"\n" +
+                "* \"exit\" - exits the game\n" +
+                "* \"restart\" - restarts the app\n" +
+				"* \"restart game\" - restarts current game\n" +
+				"* \"help\" - info\n");
+			Console.WriteLine("Press ENTER to start");
+			Console.ReadLine();
+		}
+
+
+		public void ShowWinner(char pawnName)
+		{
+			string winner = "";
+			switch (pawnName)
+			{
+				case 'W':
+					winner = "white";
+					break;
+				case 'B':
+					winner = "black";
+					break;
+			}
+			Console.WriteLine($"Winner is {winner}");
+		}
 	}
 }
 

@@ -18,7 +18,6 @@ namespace quoridor
 
         public Player currentPlayer = playerFirst;
 
-
         public bool GameEnded
         {
             get
@@ -42,7 +41,6 @@ namespace quoridor
 
         public void MovePiece(char name, int toCol, int toRow)
         {
-            //bool gameEnded = IsGameEnded();
             if (GameEnded)
             {
                 return;
@@ -53,8 +51,8 @@ namespace quoridor
                 GetPossibleMoves(pawn);
                 if (!ContainsPawn(new Pawn(name, toCol, toRow), possibleMoves))
                 {
-                    Console.WriteLine("Forbidden move");
-                    ShowPossibleMoves(possibleMoves);
+                    //Console.WriteLine("Forbidden move");
+                   // ShowPossibleMoves(possibleMoves);
                 }
                 else
                 {
@@ -66,21 +64,21 @@ namespace quoridor
                     }
                 }
             }
-            else
-            {
-                Console.WriteLine("Unknown pawn");
-            }
+            //else
+            //{
+            //    Console.WriteLine("Unknown pawn");
+            //}
         }
 
 
-        private static void ShowPossibleMoves(List<Pawn> pawns)
-        {
-            Console.WriteLine("Possible moves:");
-            foreach (var pawn in pawns)
-            {
-                Console.WriteLine($"{pawn.Name} col: {pawn.Col}  row: {pawn.Row}");
-            }
-        }
+        //private static void ShowPossibleMoves(List<Pawn> pawns)
+        //{
+        //    Console.WriteLine("Possible moves:");
+        //    foreach (var pawn in pawns)
+        //    {
+        //        Console.WriteLine($"{pawn.Name} col: {pawn.Col}  row: {pawn.Row}");
+        //    }
+        //}
 
 
         private static bool ContainsPawn(Pawn pawn, List<Pawn> pawns)
@@ -305,15 +303,15 @@ namespace quoridor
             }
             if (orientation is null)
             {
-                Console.WriteLine("Incorrect orientation");
+                //Console.WriteLine("Incorrect orientation");
             }
             else if (currentPlayer.WallsLeft == 0)
             {
-                Console.WriteLine("No walls left");
+                //Console.WriteLine("No walls left");
             }
             else if (!ContainsWall(new Wall(orientation: orientation, row: toRow, col: toCol), possibleWalls))
             {
-                Console.WriteLine("Forbidden wall");
+                //Console.WriteLine("Forbidden wall");
             }
             else
             {
@@ -345,7 +343,7 @@ namespace quoridor
                     WallsOnBoard.RemoveAll(x => x.Orientation == orientation && x.Row == toRow && x.Col == toCol);
                     possibleWalls.Add(new Wall(orientation, toCol, toRow));
                     currentPlayer.WallsLeft++;
-                    Console.WriteLine("Impossible wall");
+                    //Console.WriteLine("Impossible wall");
                 }
 
             }
@@ -416,7 +414,7 @@ namespace quoridor
             //finding where path begins 
             var startPawn = GetPawn(playerName);
             if (startPawn is null)
-                throw new ArgumentNullException(nameof(startPawn));
+                throw new ArgumentNullException(null, nameof(startPawn));
             var currentField = new Field(pawn: startPawn, length: 0);
 
             // saving pawns on board positions and removing pawns from the board
@@ -427,8 +425,8 @@ namespace quoridor
                 //adding current field to closed list and path stack
                 path.Push(currentField);
                 closedList.Add(currentField);
-                Console.WriteLine($"name : {currentField.Pawn.Name} " +
-                    $"col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} weight: {currentField.Weight}");
+                //Console.WriteLine($"name : {currentField.Pawn.Name} " +
+                //   $"col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} weight: {currentField.Weight}");
 
                 //generating open list
                 GetPossibleMoves(currentField.Pawn);

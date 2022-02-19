@@ -14,10 +14,14 @@ namespace quoridor
 
 		public void Start()
 		{
-			quoridorEngine.GameInitializer();
+			GameInitializer();
 			while (true)
 			{
 				ViewDidLoad();
+				if (quoridorEngine.IsGameEnded())
+				{
+					boardView.ShowWinner(quoridorEngine.currentPlayer.PawnName);
+				}
 				Read();
 			}
 		}
@@ -32,9 +36,20 @@ namespace quoridor
 		}
 
 
-        private void CommandRun(Command command)
+		public void GameInitializer()
 		{
+			bot.IsWorking = boardView.IsPlayingWithBot();
+			if (bot.IsWorking)
+			{
+				bot.PawnName = boardView.ChooseSide();
+			}
+			boardView.Help();
+			quoridorEngine.GameInitializer();
+		}
 
+
+		private void CommandRun(Command command)
+		{
 			var pawnsColumnGrid = new Dictionary<char, int>()
 			{
 				{'A', 1},
@@ -58,7 +73,7 @@ namespace quoridor
 				{'Y', 7},
 				{'Z', 8}
 			};
-			Console.WriteLine($"Your command is {command.Name} col: {command.ToCol}, row: {command.ToRow} optional{command.Orientation}");
+			//Console.WriteLine($"Your command is {command.Name} col: {command.ToCol}, row: {command.ToRow} optional{command.Orientation}");
 			try
 			{
 				switch (command.Name)
@@ -66,7 +81,7 @@ namespace quoridor
 					case "move":
 						int toCol = pawnsColumnGrid[command.ToCol];
 						int toRow = int.Parse(Convert.ToString(command.ToRow));
-						Console.WriteLine($"Your command is {quoridorEngine.currentPlayer.PawnName} col: {toCol}, row: {toRow}");
+						//Console.WriteLine($"Your command is {quoridorEngine.currentPlayer.PawnName} col: {toCol}, row: {toRow}");
 						quoridorEngine.MovePiece(name: quoridorEngine.currentPlayer.PawnName, toCol: toCol, toRow: toRow);
 						break;
 					case "wall":
@@ -75,7 +90,13 @@ namespace quoridor
 						quoridorEngine.SetWall(orientation: command.Orientation, toCol: toColWall, toRow: toRowWall);
 						break;
 					case "restart":
+						GameInitializer();
+						break;
+					case "restart game":
 						quoridorEngine.GameInitializer();
+						break;
+					case "help":
+						boardView.Help();
 						break;
 					case "exit":
 						quoridorEngine.Exit();
@@ -84,7 +105,7 @@ namespace quoridor
 			}
 			catch
 			{
-				Console.WriteLine("Incorrect input");
+				//Console.WriteLine("Incorrect input");
 			}
 		}
 
@@ -111,7 +132,6 @@ namespace quoridor
 			List<string> commands = new() { "move", "wall" };
 			if (quoridorEngine.currentPlayer.WallsLeft == 0)
 				commands.Remove("wall");
-
 			Random random = new();
 			switch (commands[random.Next(commands.Count)])
 			{
