@@ -159,9 +159,19 @@ namespace quoridor
 				command = new Command("restart");
 				return true;
 			}
+			else if (input[0] == "restart" && input[1] == "game")
+			{
+				command = new Command("restart game");
+				return true;
+			}
 			else if (input[0] == "exit")
 			{
 				command = new Command("exit");
+				return true;
+			}
+			else if (input[0] == "help")
+			{
+				command = new Command("help");
 				return true;
 			}
 			else
@@ -221,7 +231,7 @@ namespace quoridor
                 "* \"restart\" - restarts the app\n" +
 				"* \"restart game\" - restarts current game\n" +
 				"* \"help\" - info\n");
-			Console.WriteLine("Press ENTER to start");
+			Console.WriteLine("Press ENTER to continue");
 			Console.ReadLine();
 		}
 

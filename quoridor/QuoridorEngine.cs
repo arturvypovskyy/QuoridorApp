@@ -197,7 +197,8 @@ namespace quoridor
             if (PawnsOnBoard.Where(x => x.Col == pawn.Col && x.Row == pawn.Row - 1).Any())
             {
                 if (WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col && x.Row == pawn.Row - 2).Any()
-                    || WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 1 && x.Row == pawn.Row - 2).Any())
+                    || WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 1 && x.Row == pawn.Row - 2).Any()
+                    || PawnsOnBoard.Where(x => x.Row == 1).Any())
                 {
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col - 1, pawn.Row - 1));
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col + 1, pawn.Row - 1));
@@ -212,14 +213,14 @@ namespace quoridor
                     {
                         possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col - 1 && x.Row == pawn.Row - 1);
                     }
-
                 }
             }
             //backward
             if (PawnsOnBoard.Where(x => x.Col == pawn.Col && x.Row == pawn.Row + 1).Any())
             {
                 if (WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col && x.Row == pawn.Row + 1).Any()
-                    || WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 1 && x.Row == pawn.Row + 1).Any())
+                    || WallsOnBoard.Where(x => x.Orientation == 'h' && x.Col == pawn.Col - 1 && x.Row == pawn.Row + 1).Any()
+                    || PawnsOnBoard.Where(x => x.Row == 9).Any())
                 {
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col - 1, pawn.Row + 1));
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col + 1, pawn.Row + 1));
@@ -240,7 +241,8 @@ namespace quoridor
             if (PawnsOnBoard.Where(x => x.Col == pawn.Col - 1 && x.Row == pawn.Row).Any())
             {
                 if (WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col - 2 && x.Row == pawn.Row - 1).Any()
-                    || WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col - 2 && x.Row == pawn.Row).Any())
+                    || WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col - 2 && x.Row == pawn.Row).Any()
+                    || PawnsOnBoard.Where(x => x.Col == 1).Any())
                 {
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col - 1, pawn.Row - 1));
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col - 1, pawn.Row + 1));
@@ -261,7 +263,8 @@ namespace quoridor
             if (PawnsOnBoard.Where(x => x.Col == pawn.Col + 1 && x.Row == pawn.Row).Any())
             {
                 if (WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col + 1 && x.Row == pawn.Row - 1).Any()
-                    || WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col + 1 && x.Row == pawn.Row).Any())
+                    || WallsOnBoard.Where(x => x.Orientation == 'v' && x.Col == pawn.Col + 1 && x.Row == pawn.Row).Any()
+                    || PawnsOnBoard.Where(x => x.Col == 9).Any())
                 {
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col + 1, pawn.Row - 1));
                     possibleMoves.Add(new Pawn(pawn.Name, pawn.Col + 1, pawn.Row + 1));
