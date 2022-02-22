@@ -7,6 +7,7 @@ namespace quoridor
 
 		public int WallsLeft { get; set; }
 
+
 		public Player(char pawnName, int wallsLeft)
 		{
 			PawnName = pawnName;

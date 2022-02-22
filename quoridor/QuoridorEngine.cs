@@ -12,11 +12,11 @@ namespace quoridor
 
         public List<Wall> possibleWalls = new();
 
-        private static readonly Player playerFirst = new('W', 10);
+        private static readonly Player playerWhite = new('W', 10);
 
-        private static readonly Player playerSecond = new('B', 10);
+        private static readonly Player playerBlack = new('B', 10);
 
-        public Player currentPlayer = playerFirst;
+        public Player currentPlayer = playerWhite;
 
         public bool GameEnded
         {
@@ -24,6 +24,7 @@ namespace quoridor
             {
                 return IsGameEnded();
             }
+            set { }
         }
 
         public QuoridorEngine() { }
@@ -334,7 +335,7 @@ namespace quoridor
                     possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
                     possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
                 }
-                if (WayExistsFor('W') && WayExistsFor('B'))
+                if (GetShortestPathFor('W').Count !=0 && GetShortestPathFor('B').Count != 0)
                 {
                     if (!IsGameEnded())
                     {
@@ -399,16 +400,16 @@ namespace quoridor
         {
             if (currentPlayer.PawnName == 'W')
             {
-                currentPlayer = playerSecond;
+                currentPlayer = playerBlack;
             }
             else
             {
-                currentPlayer = playerFirst;
+                currentPlayer = playerWhite;
             }
         }
 
 
-        private bool WayExistsFor(char playerName)
+        public Stack<Field> GetShortestPathFor(char playerName)
         {
             var openList = new List<Field>();
             var closedList = new List<Field>();
@@ -419,7 +420,6 @@ namespace quoridor
             if (startPawn is null)
                 throw new ArgumentNullException(null, nameof(startPawn));
             var currentField = new Field(pawn: startPawn, length: 0);
-
             // saving pawns on board positions and removing pawns from the board
             PawnsOnBoard.RemoveAll(x => x.Name == startPawn.Name && x.Col == startPawn.Col && x.Row == startPawn.Row);
 
@@ -441,7 +441,7 @@ namespace quoridor
                 //if there is no possible moves
                 if (possibleMoves.Count == 0)
                 {
-                    if (path.Count == 1)
+                    if (path.Count > 1)
                     {
                         path.Pop();
                         currentField = path.Pop();
@@ -452,7 +452,7 @@ namespace quoridor
                     {
                         // adding removed pawns to the board
                         PawnsOnBoard.Add(startPawn);
-                        return false;
+                        return new Stack<Field>();
                     }
                 }
                 //clear open list from previous iteration
@@ -465,7 +465,7 @@ namespace quoridor
                     {
                         // adding removed pawns to the board
                         PawnsOnBoard.Add(startPawn);
-                        return true;
+                        return path;
                     }
                     openList.Add(new Field(possibleMove, currentField.Length + 10));
                 }
@@ -486,14 +486,15 @@ namespace quoridor
 
         public void Exit()
         {
-            System.Environment.Exit((int)ReturnCode.Success);
+            Environment.Exit((int)ReturnCode.Success);
         }
 
 
         public bool IsGameEnded()
         {
-            return PawnsOnBoard.Where(x => (x.Name == 'W' && x.Row == 1) || (x.Name == 'B' && x.Row == 9)).Any();
-        }
+            return PawnsOnBoard.Where(x => (x.Name == 'W' && x.Row == 1)
+            || (x.Name == 'B' && x.Row == 9)).Any();
+        } 
     }
 }
 
