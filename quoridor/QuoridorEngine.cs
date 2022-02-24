@@ -18,14 +18,7 @@ namespace quoridor
 
         public Player currentPlayer = playerWhite;
 
-        public bool GameEnded
-        {
-            get
-            {
-                return IsGameEnded();
-            }
-            set { }
-        }
+
 
         public QuoridorEngine() { }
 
@@ -36,13 +29,15 @@ namespace quoridor
             WallsOnBoard.Clear();
             PawnsOnBoard.Add(new Pawn(name: 'W', col: 5, row: 9));
             PawnsOnBoard.Add(new Pawn(name: 'B', col: 5, row: 1));
+            //PawnsOnBoard.Add(new Pawn(name: 'W', col: 5, row: 5));
+            //PawnsOnBoard.Add(new Pawn(name: 'B', col: 6, row: 4));
             GetAllPossibleWalls();
         }
 
 
         public void MovePiece(char name, int toCol, int toRow)
         {
-            if (GameEnded)
+            if (IsGameEnded())
             {
                 return;
             }
@@ -59,7 +54,7 @@ namespace quoridor
                 {
                     PawnsOnBoard.Add(new Pawn(name: pawn.Name, col: toCol, row: toRow));
                     PawnsOnBoard.Remove(pawn);
-                    if (!GameEnded)
+                    if (!IsGameEnded())
                     {
                         ChangePlayer();
                     }
@@ -293,7 +288,7 @@ namespace quoridor
                     possibleMove.Row > 9 ||
                     possibleMove.Row < 1)
                 {
-                    possibleMoves.Remove(possibleMove);
+                    possibleMoves.RemoveAll(x => x.Col == possibleMove.Col && x.Row == possibleMove.Row);
                 }
             }
         }
@@ -335,7 +330,10 @@ namespace quoridor
                     possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
                     possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
                 }
-                if (GetShortestPathFor('W').Count !=0 && GetShortestPathFor('B').Count != 0)
+               
+                
+           
+                if(GetShortestPathFor('W') is not null && GetShortestPathFor('B') is not null)
                 {
                     if (!IsGameEnded())
                     {
@@ -409,79 +407,160 @@ namespace quoridor
         }
 
 
-        public Stack<Field> GetShortestPathFor(char playerName)
+        public Stack<Field>? GetShortestPathFor(char playerName)
         {
+
             var openList = new List<Field>();
             var closedList = new List<Field>();
             var path = new Stack<Field>();
-
-            //finding where path begins 
             var startPawn = GetPawn(playerName);
             if (startPawn is null)
                 throw new ArgumentNullException(null, nameof(startPawn));
-            var currentField = new Field(pawn: startPawn, length: 0);
-            // saving pawns on board positions and removing pawns from the board
+            //removing existing pawn from the board
             PawnsOnBoard.RemoveAll(x => x.Name == startPawn.Name && x.Col == startPawn.Col && x.Row == startPawn.Row);
-
-            while (true)
+            //creating first current field
+            var currentField = new Field(pawn: startPawn, length: 0);
+            openList.Add(currentField);
+            //star finding path
+            while (openList.Count != 0)
             {
-                //adding current field to closed list and path stack
-                path.Push(currentField);
-                closedList.Add(currentField);
-                //Console.WriteLine($"name : {currentField.Pawn.Name} " +
-                //   $"col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} weight: {currentField.Weight}");
-
-                //generating open list
-                GetPossibleMoves(currentField.Pawn);
-                foreach (var field in closedList)
-                {
-                    //removing fields of closed list from possible moves
-                    possibleMoves.RemoveAll(x => x.Row == field.Pawn.Row && x.Col == field.Pawn.Col);
-                }
-                //if there is no possible moves
-                if (possibleMoves.Count == 0)
-                {
-                    if (path.Count > 1)
-                    {
-                        path.Pop();
-                        currentField = path.Pop();
-                        closedList.RemoveAll(x => x.Pawn.Row == currentField.Pawn.Row && x.Pawn.Col == currentField.Pawn.Col);
-                        continue;
-                    }
-                    else
-                    {
-                        // adding removed pawns to the board
-                        PawnsOnBoard.Add(startPawn);
-                        return new Stack<Field>();
-                    }
-                }
-                //clear open list from previous iteration
-                openList.Clear();
-                foreach (var possibleMove in possibleMoves)
-                {
-                    //if we reached the goal row
-                    int goalRow = playerName == 'W' ? 1 : 9;
-                    if (possibleMove.Row == goalRow)
-                    {
-                        // adding removed pawns to the board
-                        PawnsOnBoard.Add(startPawn);
-                        return path;
-                    }
-                    openList.Add(new Field(possibleMove, currentField.Length + 10));
-                }
-                //searching for min weight field in open list
+                //finding the lowest cost field
                 var minWeightField = openList[0];
                 for (int i = 1; i < openList.Count; i++)
                 {
-                    if (openList[i].Weight < minWeightField.Weight)
-                    {
+                    if (minWeightField.Weight > openList[i].Weight)
                         minWeightField = openList[i];
-                    }
                 }
-                //setting new current field
                 currentField = minWeightField;
+                openList.RemoveAll(x => x.Pawn.Col == currentField.Pawn.Col && x.Pawn.Row == currentField.Pawn.Row);
+                closedList.Add(currentField);
+
+                //adding current field to path
+                path.Push(currentField);
+                Console.WriteLine($"name: {currentField.Pawn.Name} col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} ");
+                if (currentField.Pawn.Col < 1 || currentField.Pawn.Col > 9 || currentField.Pawn.Row < 1 || currentField.Pawn.Row > 9)
+                {
+                    PawnsOnBoard.Add(startPawn);
+                    return null;
+                }
+                //if we at the goal row
+                int goalRow = playerName == 'W' ?  1 : 9;
+                if (currentField.Pawn.Row == goalRow)
+                {
+                    PawnsOnBoard.Add(startPawn);
+                    return path;
+                }
+                //generating open list
+                GetPossibleMoves(currentField.Pawn);
+                //removing feilds of closed list from open list
+                
+                //adding possible moves to open list
+                foreach (var pawn in possibleMoves)
+                {
+                    if (closedList.Any(x => x.Pawn.Col == pawn.Col && x.Pawn.Row == pawn.Row))
+                        continue;
+
+                    var child = new Field(pawn, currentField.Length + 10);
+                    if (openList.Any(x => x.Pawn.Col == child.Pawn.Col && x.Pawn.Row == child.Pawn.Row && x.Length < child.Length))
+                    {
+                        continue;
+                    }
+
+                    openList.Add(child);
+                }
             }
+
+            PawnsOnBoard.Add(startPawn);
+            return null;
         }
+        
+
+        //public Stack<Field>? GetShortestPathFor(char playerName)
+        //{
+        //    var openList = new List<Field>();
+        //    var forbidenPawns = new List<Pawn>();
+        //    var realForbidenPawns = new List<Pawn>();
+        //    var path = new Stack<Field>();
+
+        //    //finding where path begins 
+        //    var startPawn = GetPawn(playerName);
+        //    if (startPawn is null)
+        //        throw new ArgumentNullException(null, nameof(startPawn));
+        //    var currentField = new Field(pawn: startPawn, length: 0);
+        //    // saving pawns on board positions and removing pawns from the board
+        //    PawnsOnBoard.RemoveAll(x => x.Name == startPawn.Name && x.Col == startPawn.Col && x.Row == startPawn.Row);
+        //    int counter = 0;
+        //    while (true)
+        //    {
+        //        //adding current field to closed list and path stack
+        //        path.Push(currentField);
+        //        //Console.WriteLine($"name: {currentField.Pawn.Name} col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} ");
+        //        forbidenPawns.Add(currentField.Pawn);
+        //        //Console.WriteLine($"name : {currentField.Pawn.Name} " +
+        //        //   $"col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} weight: {currentField.Weight}");
+        //        //if we reached the goal row
+        //        int goalRow = playerName == 'W' ? 1 : 9;
+        //        foreach (var field in openList)
+        //        {
+        //            //if we reached the goal row
+        //            if (field.Pawn.Row == goalRow)
+        //            {
+        //                // adding removed pawns to the board
+        //                PawnsOnBoard.Add(startPawn);
+        //                return path;
+        //            }
+        //        }
+
+        //        //generating open list
+        //        GetPossibleMoves(currentField.Pawn);
+        //        foreach (var pawn in forbidenPawns)
+        //        {
+        //            possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row);
+        //        }
+        //        foreach (var pawn in realForbidenPawns)
+        //        {
+        //            possibleMoves.RemoveAll(x => x.Name == pawn.Name && x.Col == pawn.Col && x.Row == pawn.Row);
+        //        }
+
+        //        //if there is no possible moves
+        //        if (possibleMoves.Count == 0)
+        //        {
+        //            if (path.Count == 1)
+        //            {
+        //                // adding removed pawns to the board
+        //                PawnsOnBoard.Add(startPawn);
+        //                return null;
+        //            }
+        //            else
+        //            {
+        //                forbidenPawns.Clear();
+        //                realForbidenPawns.Add(currentField.Pawn);
+        //                currentField = new Field(startPawn, 0);
+        //                path.Clear();
+        //                openList.Clear();
+        //                continue;
+        //            }
+        //        }
+        //        //clear open list from previous iteration
+        //        openList.Clear();
+        //        foreach (var possibleMove in possibleMoves)
+        //        {
+        //            openList.Add(new Field(possibleMove, currentField.Length + 10));
+        //        }
+        //        //searching for min weight field in open list
+        //        var minWeightField = openList[0];
+        //        for (int i = 1; i < openList.Count; i++)
+        //        {
+        //            if (openList[i].Weight < minWeightField.Weight)
+        //            {
+        //                minWeightField = openList[i];
+        //            }
+        //        }
+        //        //setting new current field
+        //        currentField = minWeightField;
+        //        counter++;
+        //    }
+        //}
 
 
         public void Exit()

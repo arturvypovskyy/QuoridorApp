@@ -120,7 +120,7 @@ namespace quoridor
 			}
             else
 			{ 
-			    AIBotAction();
+			    //AIBotAction();
 				CommandRun(boardView.Read());
 			}
 		}
@@ -161,7 +161,7 @@ namespace quoridor
         //AI bot
         public void AIBotAction()
         {
-			//minimax.GetMove(new Position(quoridorEngine));
+			minimax.GetMove(new Position(quoridorEngine));
 		}
     }
 }

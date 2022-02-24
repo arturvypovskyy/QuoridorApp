@@ -13,8 +13,6 @@ namespace quoridor
             {
                 WallsOnBoard.Add(new Wall(orientation: wall.Orientation, col: wall.Col, row: wall.Row));
             }
-            //PawnsOnBoard = previousPosition.PawnsOnBoard;
-            //WallsOnBoard = previousPosition.WallsOnBoard;
         }
 
 
@@ -33,8 +31,21 @@ namespace quoridor
 
         public int GetStaticEvaluation()
         {
+
             var maximizerPlayerPathLength = GetShortestPathFor('W').Count;
+            //Console.WriteLine("W shortest path");
+            //foreach (var step in GetShortestPathFor('W'))
+            //{
+            //    Console.WriteLine($"name: {step.Pawn.Name} col: {step.Pawn.Col} row: {step.Pawn.Row}");
+            //}
+            
             var minimizerPlayerPathLength = GetShortestPathFor('B').Count;
+            //Console.WriteLine("B shortest path");
+            //foreach (var step in GetShortestPathFor('B'))
+            //{
+            //    Console.WriteLine($"name: {step.Pawn.Name} col: {step.Pawn.Col} row: {step.Pawn.Row}");
+            //}
+
             return minimizerPlayerPathLength - maximizerPlayerPathLength;
         }
     }

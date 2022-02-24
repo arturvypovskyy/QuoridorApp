@@ -14,7 +14,7 @@ namespace quoridor
         {
             Pawn = pawn;
             Length = length;
-            int heuristicApproximation = pawn.Name == 'B' ? 9 - pawn.Row : -1 * (1 - pawn.Row);
+            int heuristicApproximation = pawn.Name == 'B' ? (9 - pawn.Row) * 10 : -10 * (1 - pawn.Row);
             Weight = Length + heuristicApproximation;
         }
     }
