@@ -5,6 +5,13 @@ namespace quoridor
     {
         private Random rand = new Random();
 
+
+        private Player GetPlayer(Position position, char name)
+        {
+            return position.playerBlack.PawnName == name ? position.playerBlack : position.playerWhite;
+        }
+
+
         private Dictionary<char, List<Field>> GetPaths(Position position)
         {
             Dictionary<char, List<Field>> paths = new();
@@ -13,18 +20,28 @@ namespace quoridor
             for (int i = 0; i < pawns.Count; i++)
             {
                 Pawn pawn = pawns[i];
-                paths[pawn.Name] = position.GetShortestPathFor(pawn.Name);
+            restart:
+                try
+                {
+                    paths[pawn.Name] = position.GetShortestPathFor(pawn.Name);
+                    if (paths[pawn.Name] == null) goto restart;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    goto restart;
+                }
             }
             return paths;
         }
 
 
-        private int BestWeight(Dictionary<char, List<Field>> paths, Position position)
+        private int BestWeight(Dictionary<char, List<Field>> paths, Position position, char name)
         {
             int weight = int.MaxValue;
             foreach (Pawn pawn in position.PawnsOnBoard)
             {
-                if (pawn.Name != position.currentPlayer.PawnName)
+                if (pawn.Name != name)
                 {
                     weight = Math.Min(weight, paths[pawn.Name][0].Length);
                 }
@@ -33,32 +50,30 @@ namespace quoridor
         }
 
 
-        private double GetWeight(Position position)
+        private double GetWeight(Position position, char name)
         {
             Dictionary<char, List<Field>> currentPaths = GetPaths(position);
-            int weight = BestWeight(currentPaths, position);
-            int botWeight = currentPaths[position.currentPlayer.PawnName][0].Length;
+            int weight = BestWeight(currentPaths, position, name);
+            int botWeight = currentPaths[name][0].Length;
             return GetWeight(botWeight, weight);
         }
 
 
         private double GetWeight(int botWeight, int weight)
         {
-            if (botWeight == 0) return 0;
-            if (weight == 0) return 1;
-            return (double)botWeight / weight;
+            return botWeight - weight;
         }
 
 
-        public Wall GetBestWall(Position position)
+        public Wall GetBestWall(Position position, char name)
         {
-            if (position.currentPlayer.WallsLeft == 0) return null;
+            if (GetPlayer(position, name).WallsLeft == 0) return null;
             Wall bestWall = null;
             double bestWeight = int.MaxValue;
             Dictionary<char, List<Field>> paths = GetPaths(position);
             foreach (Pawn pawn in position.PawnsOnBoard)
             {
-                if (pawn.Name != position.currentPlayer.PawnName)
+                if (pawn.Name != name)
                 {
                     List<Field> path = paths[pawn.Name];
                     List<Wall> walls = new();
@@ -74,7 +89,7 @@ namespace quoridor
                                     {
                                         if (currentPosition.SetWall(currentWall.Orientation, currentWall.Row, currentWall.Col))
                                         {
-                                            double currentWeight = 1 - GetWeight(currentPosition);
+                                            double currentWeight = GetWeight(currentPosition, name);
                                             if (currentWeight < bestWeight)
                                             {
                                                 bestWeight = currentWeight;
@@ -100,30 +115,29 @@ namespace quoridor
         }
 
 
-        public Pawn getBestPawn(QuoridorEngine quoridorEngine)
+        public Pawn getBestPawn(QuoridorEngine quoridorEngine, char name)
         {
-            List<Field> path = quoridorEngine.GetShortestPathFor(quoridorEngine.currentPlayer.PawnName);
+            List<Field> path = quoridorEngine.GetShortestPathFor(name);
             if (path.Count == 1) return path[0].Pawn;
             return path[path.Count - 2].Pawn;
         }
 
 
-        public double PerformBestAction(QuoridorEngine quoridorEngine, int depth)
+        public double PerformBestAction(QuoridorEngine quoridorEngine, int depth, char name)
         {
             Position pawnPosition = new Position(quoridorEngine);
-            Pawn pawn = getBestPawn(pawnPosition);
+            Pawn pawn = getBestPawn(pawnPosition, name);
             pawnPosition.MovePiece(pawn.Name, pawn.Col, pawn.Row);
-            double pawnWeight = 1 - GetWeight(pawnPosition);
+            double pawnWeight = GetWeight(pawnPosition, name);
             Position wallPosition = new Position(quoridorEngine);
-            Wall wall = GetBestWall(wallPosition);
+            Wall wall = GetBestWall(wallPosition, name);
             if (wall != null) wallPosition.SetWall(wall.Orientation, wall.Row, wall.Col);
-            double wallWeight = 1 - GetWeight(wallPosition);
-            if (wall != null) wallWeight = 1;
+            double wallWeight = GetWeight(wallPosition, name);
 
             if (depth > 0)
             {
-                pawnWeight = PerformBestAction(pawnPosition, depth - 1);
-                if (wall != null) wallWeight = PerformBestAction(wallPosition, depth - 1);
+                pawnWeight = PerformBestAction(pawnPosition, depth - 1, name);
+                if (wall != null) wallWeight = PerformBestAction(wallPosition, depth - 1, name);
             }
             if (pawnWeight <= wallWeight || wall == null)
             {
@@ -142,13 +156,14 @@ namespace quoridor
         {
             if (!quoridorEngine.IsGameEnded())
             {
-                PerformBestAction(quoridorEngine, 3);
+                PerformBestAction(quoridorEngine, 3, quoridorEngine.currentPlayer.PawnName);
             }
             else
             {
                 Console.ReadKey();
             }
             GC.Collect();
+            //Console.WriteLine($"move({pawn.Name} {pawn.Col} {pawn.Row})");
         }
     }
 }
