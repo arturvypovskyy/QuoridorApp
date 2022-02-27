@@ -409,7 +409,7 @@ namespace quoridor
         public List<Field>? GetShortestPathFor(char playerName)
         {
             int sumWalls = 20 - (playerBlack.WallsLeft + playerWhite.WallsLeft);
-            return  GetShortestPathFor(playerName,0, new int[] {10 + 5 * sumWalls}, new List<Field>());
+            return  GetShortestPathFor(playerName,0, new int[] {10 + 2 * sumWalls}, new List<Field>());
         }
 
 

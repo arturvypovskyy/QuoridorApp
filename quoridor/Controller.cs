@@ -120,8 +120,8 @@ namespace quoridor
 			}
             else
 			{
-				BotAction();
-				//CommandRun(boardView.Read());
+				
+				CommandRun(boardView.Read());
 			}
 		}
 
