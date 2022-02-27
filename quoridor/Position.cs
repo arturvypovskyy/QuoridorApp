@@ -5,6 +5,7 @@ namespace quoridor
     { 
         public Position(Position previousPosition)
         {
+            /*
             foreach (var pawn in previousPosition.PawnsOnBoard)
             {
                 PawnsOnBoard.Add(new Pawn(name: pawn.Name, col: pawn.Col, row: pawn.Row));
@@ -13,19 +14,49 @@ namespace quoridor
             {
                 WallsOnBoard.Add(new Wall(orientation: wall.Orientation, col: wall.Col, row: wall.Row));
             }
+            foreach (var pawn in previousPosition.possibleMoves)
+            {
+                possibleMoves.Add(new Pawn(name: pawn.Name, col: pawn.Col, row: pawn.Row));
+            }
+            foreach (var wall in previousPosition.possibleWalls)
+            {
+                possibleWalls.Add(new Wall(orientation: wall.Orientation, col: wall.Col, row: wall.Row));
+            }*/
+            PawnsOnBoard.AddRange(previousPosition.PawnsOnBoard);
+            WallsOnBoard.AddRange(previousPosition.WallsOnBoard);
+            possibleMoves.AddRange(previousPosition.possibleMoves);
+            possibleWalls.AddRange(previousPosition.possibleWalls);
+            currentPlayer = previousPosition.currentPlayer == previousPosition.playerWhite ? playerWhite : playerBlack;
+            playerBlack.WallsLeft = previousPosition.playerBlack.WallsLeft;
+            playerWhite.WallsLeft = previousPosition.playerWhite.WallsLeft;
         }
 
 
         public Position(QuoridorEngine originalModel)
-        {
+        {/*
             foreach (var pawn in originalModel.PawnsOnBoard)
             {
-                PawnsOnBoard.Add(new Pawn(name: pawn.Name, col: pawn.Col, row: pawn.Row));
+                PawnsOnBoard.ra.Add(new Pawn(name: pawn.Name, col: pawn.Col, row: pawn.Row));
             }
             foreach (var wall in originalModel.WallsOnBoard)
             {
                 WallsOnBoard.Add(new Wall(orientation: wall.Orientation, col: wall.Col, row: wall.Row));
             }
+            foreach (var pawn in originalModel.possibleMoves)
+            {
+                possibleMoves.Add(new Pawn(name: pawn.Name, col: pawn.Col, row: pawn.Row));
+            }
+            foreach (var wall in originalModel.possibleWalls)
+            {
+                possibleWalls.Add(new Wall(orientation: wall.Orientation, col: wall.Col, row: wall.Row));
+            }*/
+            PawnsOnBoard.AddRange(originalModel.PawnsOnBoard);
+            WallsOnBoard.AddRange(originalModel.WallsOnBoard);
+            possibleMoves.AddRange(originalModel.possibleMoves);
+            possibleWalls.AddRange(originalModel.possibleWalls);
+            currentPlayer = originalModel.currentPlayer == originalModel.playerWhite ? playerWhite : playerBlack;
+            playerBlack.WallsLeft = originalModel.playerBlack.WallsLeft;
+            playerWhite.WallsLeft = originalModel.playerWhite.WallsLeft;
         }
 
 

@@ -28,3 +28,33 @@
 /Users/artur/Projects/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.pdb
 /Users/artur/Projects/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.genruntimeconfig.cache
 /Users/artur/Projects/QuoridorApp/quoridor/obj/Debug/net6.0/refint/quoridor.dll
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.exe
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.deps.json
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.runtimeconfig.json
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.dll
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.pdb
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.csproj.AssemblyReference.cache
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.GeneratedMSBuildEditorConfig.editorconfig
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.AssemblyInfoInputs.cache
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.AssemblyInfo.cs
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.csproj.CoreCompileInputs.cache
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.dll
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/refint/quoridor.dll
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.pdb
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.genruntimeconfig.cache
+C:/Users/Dima/Source/Repos/QuoridorApp/quoridor/obj/Debug/net6.0/ref/quoridor.dll
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.deps.json
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.runtimeconfig.json
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.dll
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/bin/Debug/net6.0/quoridor.pdb
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.csproj.AssemblyReference.cache
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.GeneratedMSBuildEditorConfig.editorconfig
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.AssemblyInfoInputs.cache
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.AssemblyInfo.cs
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.csproj.CoreCompileInputs.cache
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.dll
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/refint/quoridor.dll
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.pdb
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/quoridor.genruntimeconfig.cache
+/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/Debug/net6.0/ref/quoridor.dll

@@ -12,15 +12,17 @@ namespace quoridor
 
         public List<Wall> possibleWalls = new();
 
-        private static readonly Player playerWhite = new('W', 10);
+        public readonly Player playerWhite = new('W', 10);
 
-        private static readonly Player playerBlack = new('B', 10);
+        public readonly Player playerBlack = new('B', 10);
 
-        public Player currentPlayer = playerWhite;
+        public Player currentPlayer;
 
 
 
-        public QuoridorEngine() { }
+        public QuoridorEngine() {
+            currentPlayer = playerWhite;
+        }
 
 
         public void GameInitializer()
@@ -107,7 +109,7 @@ namespace quoridor
                 .Where(x => x.Col == pawn.Col && x.Row == pawn.Row - 1);
             if (pawnsToJump.Any())
             {
-                possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col, row: pawn.Row - 2));
+                possibleMoves.Add(new Pawn(name: pawn.Name, col: pawn.Col, row: pawn.Row - 2));
                 possibleMoves.RemoveAll(x => x.Col == pawn.Col && x.Row == pawn.Row - 1);
             }
             //backward
@@ -116,7 +118,7 @@ namespace quoridor
                 .Where(x => x.Col == pawn.Col && x.Row == pawn.Row + 1);
             if (pawnsToJump.Any())
             {
-                possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col, row: pawn.Row + 2));
+                possibleMoves.Add(new Pawn(name: pawn.Name, col: pawn.Col, row: pawn.Row + 2));
                 possibleMoves.RemoveAll(x => x.Col == pawn.Col && x.Row == pawn.Row + 1);
             }
             //to the left
@@ -125,7 +127,7 @@ namespace quoridor
                 .Where(x => x.Col == pawn.Col - 1 && x.Row == pawn.Row);
             if (pawnsToJump.Any())
             {
-                possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col - 2, row: pawn.Row));
+                possibleMoves.Add(new Pawn(name: pawn.Name, col: pawn.Col - 2, row: pawn.Row));
                 possibleMoves.RemoveAll(x => x.Col == pawn.Col - 1 && x.Row == pawn.Row);
             }
             //to the right
@@ -134,7 +136,7 @@ namespace quoridor
                 .Where(x => x.Col == pawn.Col + 1 && x.Row == pawn.Row);
             if (pawnsToJump.Any())
             {
-                possibleMoves.Add(new Pawn(name: currentPlayer.PawnName, col: pawn.Col + 2, row: pawn.Row));
+                possibleMoves.Add(new Pawn(name: pawn.Name, col: pawn.Col + 2, row: pawn.Row));
                 possibleMoves.RemoveAll(x => x.Col == pawn.Col + 1 && x.Row == pawn.Row);
             }
 
@@ -289,16 +291,17 @@ namespace quoridor
                     possibleMove.Row < 1)
                 {
                     possibleMoves.RemoveAll(x => x.Col == possibleMove.Col && x.Row == possibleMove.Row);
+                    i--;
                 }
             }
         }
 
 
-        public void SetWall(char? orientation, int toRow, int toCol)
+        public bool SetWall(char? orientation, int toRow, int toCol)
         {
             if (IsGameEnded())
             {
-                return;
+                return false;
             }
             if (orientation is null)
             {
@@ -315,40 +318,36 @@ namespace quoridor
             else
             {
                 WallsOnBoard.Add(new Wall(orientation, toRow, toCol));
-                currentPlayer.WallsLeft -= 1;
-
-                possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol && x.Row == toRow);
-                possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow);
-
-                if (orientation == 'h')
-                {
-                    possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol + 1 && x.Row == toRow);
-                    possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol - 1 && x.Row == toRow);
-                }
-                else if (orientation == 'v')
-                {
-                    possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
-                    possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
-                }
-               
                 
            
                 if(GetShortestPathFor('W') is not null && GetShortestPathFor('B') is not null)
                 {
-                    if (!IsGameEnded())
+                    currentPlayer.WallsLeft -= 1;
+
+                    possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol && x.Row == toRow);
+                    possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow);
+
+                    if (orientation == 'h')
                     {
-                        ChangePlayer();
+                        possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol + 1 && x.Row == toRow);
+                        possibleWalls.RemoveAll(x => x.Orientation == 'h' && x.Col == toCol - 1 && x.Row == toRow);
                     }
+                    else if (orientation == 'v')
+                    {
+                        possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow + 1);
+                        possibleWalls.RemoveAll(x => x.Orientation == 'v' && x.Col == toCol && x.Row == toRow - 1);
+                    }
+                    ChangePlayer();
+                    return true;
                 }
                 else
                 {
                     WallsOnBoard.RemoveAll(x => x.Orientation == orientation && x.Row == toRow && x.Col == toCol);
-                    possibleWalls.Add(new Wall(orientation, toCol, toRow));
-                    currentPlayer.WallsLeft++;
                     //Console.WriteLine("Impossible wall");
                 }
 
             }
+            return false;
         }
 
 
@@ -366,7 +365,7 @@ namespace quoridor
         }
 
 
-        private static bool ContainsWall(Wall wall, List<Wall> possibleWalls)
+        public static bool ContainsWall(Wall wall, List<Wall> possibleWalls)
         {
             foreach (var possibleWall in possibleWalls)
             {
@@ -407,73 +406,78 @@ namespace quoridor
         }
 
 
-        public Stack<Field>? GetShortestPathFor(char playerName)
+        public List<Field>? GetShortestPathFor(char playerName)
         {
+            int sumWalls = 20 - (playerBlack.WallsLeft + playerWhite.WallsLeft);
+            return  GetShortestPathFor(playerName,0, new int[] {10 + 5 * sumWalls}, new List<Field>());
+        }
 
-            var openList = new List<Field>();
-            var closedList = new List<Field>();
-            var path = new Stack<Field>();
-            var startPawn = GetPawn(playerName);
-            if (startPawn is null)
-                throw new ArgumentNullException(null, nameof(startPawn));
-            //removing existing pawn from the board
-            PawnsOnBoard.RemoveAll(x => x.Name == startPawn.Name && x.Col == startPawn.Col && x.Row == startPawn.Row);
+
+        private List<Field>? GetShortestPathFor(char playerName, int length, int[] min, List<Field> allFields)
+        {
+            if (length > min[0]) return null;
+            List<Field> minPath = null;
+            var currentPawn = GetPawn(playerName);
+            if (currentPawn is null)
+                throw new ArgumentNullException(null, nameof(currentPawn));
             //creating first current field
-            var currentField = new Field(pawn: startPawn, length: 0);
-            openList.Add(currentField);
-            //star finding path
-            while (openList.Count != 0)
+            var currentField = new Field(pawn: currentPawn, length: length);
+            for (int i = 0; i < allFields.Count; i++)
             {
-                //finding the lowest cost field
-                var minWeightField = openList[0];
-                for (int i = 1; i < openList.Count; i++)
+                Field field = allFields[i];
+                if (field.Pawn.Col == currentField.Pawn.Col && field.Pawn.Row == currentField.Pawn.Row)
                 {
-                    if (minWeightField.Weight > openList[i].Weight)
-                        minWeightField = openList[i];
-                }
-                currentField = minWeightField;
-                openList.RemoveAll(x => x.Pawn.Col == currentField.Pawn.Col && x.Pawn.Row == currentField.Pawn.Row);
-                closedList.Add(currentField);
-
-                //adding current field to path
-                path.Push(currentField);
-                Console.WriteLine($"name: {currentField.Pawn.Name} col: {currentField.Pawn.Col} row: {currentField.Pawn.Row} ");
-                if (currentField.Pawn.Col < 1 || currentField.Pawn.Col > 9 || currentField.Pawn.Row < 1 || currentField.Pawn.Row > 9)
-                {
-                    PawnsOnBoard.Add(startPawn);
-                    return null;
-                }
-                //if we at the goal row
-                int goalRow = playerName == 'W' ?  1 : 9;
-                if (currentField.Pawn.Row == goalRow)
-                {
-                    PawnsOnBoard.Add(startPawn);
-                    return path;
-                }
-                //generating open list
-                GetPossibleMoves(currentField.Pawn);
-                //removing feilds of closed list from open list
-                
-                //adding possible moves to open list
-                foreach (var pawn in possibleMoves)
-                {
-                    if (closedList.Any(x => x.Pawn.Col == pawn.Col && x.Pawn.Row == pawn.Row))
-                        continue;
-
-                    var child = new Field(pawn, currentField.Length + 10);
-                    if (openList.Any(x => x.Pawn.Col == child.Pawn.Col && x.Pawn.Row == child.Pawn.Row && x.Length < child.Length))
+                    if (currentField.Length >= field.Length)
                     {
-                        continue;
+                        return null;
                     }
-
-                    openList.Add(child);
+                    allFields.Remove(field);
                 }
             }
-
-            PawnsOnBoard.Add(startPawn);
-            return null;
+            allFields.Add(currentField);
+            if (IsGameEnded())
+            {
+                minPath = new();
+                minPath.Add(currentField);
+                return minPath;
+            }
+            //star finding path
+            //finding the lowest cost field
+            GetPossibleMoves(currentPawn);
+            List<Pawn> allMoves = new();
+            allMoves.AddRange(possibleMoves);
+            PawnsOnBoard.Remove(currentPawn);
+            foreach (Pawn pawn in allMoves)
+            {
+                PawnsOnBoard.Add(pawn);
+                var path = GetShortestPathFor(playerName, length + 1, min, allFields);
+                if (path != null)
+                {
+                    if (minPath == null)
+                    {
+                        minPath = path;
+                    }
+                    else
+                    {
+                        Field minField = minPath[0];
+                        Field curField = path[0];
+                        if (minField.Length > curField.Length)
+                        {
+                            minPath = path;
+                        }
+                    }
+                    min[0] = minPath[0].Length;
+                }
+                PawnsOnBoard.Remove(pawn);
+            }
+            PawnsOnBoard.Add(currentPawn);
+            if (minPath != null)
+            {
+                minPath.Add(currentField);
+            }
+            return minPath;
         }
-        
+
 
         //public Stack<Field>? GetShortestPathFor(char playerName)
         //{

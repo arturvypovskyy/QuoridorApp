@@ -116,23 +116,23 @@ namespace quoridor
 		{
             if (quoridorEngine.currentPlayer.PawnName == bot.PawnName && bot.IsWorking)
             {
-				BotAction();
+				AIBotAction();
 			}
             else
-			{ 
-			    //AIBotAction();
-				CommandRun(boardView.Read());
+			{
+				BotAction();
+				//CommandRun(boardView.Read());
 			}
 		}
 
 
         public void BotAction()
-        {
-            if (!bot.IsWorking)
+		{
+			if (!bot.IsWorking)
             {
                 return;
-            }
-            List<string> commands = new() { "move", "wall" };
+			}
+			List<string> commands = new() { "move", "wall" };
             if (quoridorEngine.currentPlayer.WallsLeft == 0)
                 commands.Remove("wall");
             Random random = new();
@@ -161,7 +161,7 @@ namespace quoridor
         //AI bot
         public void AIBotAction()
         {
-			minimax.GetMove(new Position(quoridorEngine));
+			minimax.GetMove(quoridorEngine);
 		}
     }
 }

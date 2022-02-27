@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/artur/Projects/QuoridorApp/quoridor/quoridor.csproj",
+      "projectUniqueName": "/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/quoridor.csproj",
       "projectName": "quoridor",
-      "projectPath": "/Users/artur/Projects/QuoridorApp/quoridor/quoridor.csproj",
+      "projectPath": "/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/quoridor.csproj",
       "packagesPath": "/Users/artur/.nuget/packages/",
-      "outputPath": "/Users/artur/Projects/QuoridorApp/quoridor/obj/",
+      "outputPath": "/Users/artur/Downloads/Telegram Desktop/QuoridorApp/quoridor/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/artur/.nuget/NuGet/NuGet.Config"
